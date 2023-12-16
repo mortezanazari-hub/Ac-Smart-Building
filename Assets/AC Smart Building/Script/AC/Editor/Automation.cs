@@ -16,7 +16,6 @@ namespace AC
         {
             
             Methods.ResetTmpBaseMeshes();
-            Methods.ResetTmpMeshTypesList();
             var allFolder = Methods.ContentFolder(StaticResources.ContentPath);
             var folderNames = new List<string>();
             foreach (var folder in allFolder)
@@ -29,12 +28,6 @@ namespace AC
             foreach (var name in folderNames)
             {
              JsonManager.ReadObjSpecJson(name);
-             foreach (var tmpMesh in StaticResources.TmpMeshTypesList)
-             {
-                 var filename = tmpMesh.Filename;
-                 Methods.MeshMaker(filename);
-             }
-             Methods.ResetTmpMeshTypesList();
              var building = Methods.BuildingMaker();
              Methods.ResetTmpBaseMeshes();
              StaticResources.BuildingsList.Add(building);

@@ -5,8 +5,7 @@ namespace AC
     public static class StaticResources
     {
         public static List<Building> BuildingsList = new List<Building>();
-        public static List<TmpMeshType> TmpMeshTypesList = new List<TmpMeshType>();
-        public static List<MeshesType> TmpBaseMeshes = new List<MeshesType>();
+        public static List<MeshesType> TmpMeshesType = new List<MeshesType>();
         public static List<string> BuildingsNameList = new List<string>();
         public const string ContentPath = "Assets/AC Smart Building/Resource/Content/";
 

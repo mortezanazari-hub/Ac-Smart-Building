@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Newtonsoft.Json;
+using Unity.Plastic.Newtonsoft.Json;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -27,7 +27,7 @@ namespace AC
             using (var streamReader = new StreamReader($"{StaticResources.FbxPath(name)}Obj_Spec.json"))
             {
                 var str = streamReader.ReadToEnd();
-                StaticResources.TmpMeshTypesList = JsonConvert.DeserializeObject<List<TmpMeshType>>(str);
+                StaticResources.TmpMeshesType = JsonConvert.DeserializeObject<List<MeshesType>>(str);
             }
         }
         

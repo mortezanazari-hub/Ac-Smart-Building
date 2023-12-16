@@ -13,7 +13,6 @@ namespace AC
 {
     public abstract class Methods
     {
-        Dictionary<string,string> MeshClass ()=new Dictionary<string,string>();
         private static List<string> _materialNamesList = new List<string>();
 
         /// <summary>
@@ -135,7 +134,7 @@ namespace AC
         /// <param name="fileName">the file name</param>
         /// <param name="fbxFolder">the folder of fbx</param>
         /// <returns></returns>
-        private static Mesh FbxFinder(string fileName, string fbxFolder)
+        public static Mesh FbxFinder(string fileName, string fbxFolder)
         {
             return AssetDatabase.LoadAssetAtPath<Mesh>(fbxFolder + fileName);
         }
@@ -147,7 +146,7 @@ namespace AC
         /// <param name="materialName">the material name</param>
         /// <param name="textureFolder">the texture folder</param>
         /// <returns></returns>
-        private static List<Texture2D> TexturesMatch(string materialName, string textureFolder)
+        public static List<Texture2D> TexturesMatch(string materialName, string textureFolder)
         {
             return Directory.GetFiles(textureFolder)
                 .Where(t => t.Contains(materialName))
@@ -247,24 +246,7 @@ namespace AC
                 material.SetTexture(propertyName, texture);
             }
         }
-
-        //------------------------------------------------------------------------------------------------------------//
-        /// <summary>
-        /// this method make mesh type, ready for building
-        /// </summary>
-        /// <param name="fileName"></param>
-        public static void MeshMaker(string fileName)
-        {
-            var name = Methods.NameFinder(fileName, "name");
-            var type = Methods.NameFinder(fileName, "type");
-            var verison = Methods.NameFinder(fileName, "var");
-            var tmp = StaticResources.TmpMeshTypesList.FindAll(tmpMesh => tmpMesh.Type.Equals($"{type}")).Find(v => v.Variation.Equals($"{verison}"));
-            var baseMesh = tmp;
-            baseMesh.Textures = Methods.TexturesMatch(tmp.MaterialName, StaticResources.TexturePath(name));
-            baseMesh.Fbx = Methods.FbxFinder(fileName, StaticResources.FbxPath(name));
-            StaticResources.TmpBaseMeshes.Add(baseMesh);
-        }
-
+        
 
         //------------------------------------------------------------------------------------------------------------//
 
@@ -274,7 +256,7 @@ namespace AC
         /// <returns></returns>
         public static Building BuildingMaker()
         {
-            var meshList = StaticResources.TmpBaseMeshes;
+            var meshList = StaticResources.TmpMeshesType;
             Building building = new Building();
             foreach (var mesh in meshList)
             {
@@ -282,85 +264,85 @@ namespace AC
                 switch (type.ToLower())
                 {
                     case "bfl":
-                        building.BackFloorLeft.Add(MyConvert.ToBfl(mesh));
+                        building.BackFloorLeft.Add(mesh);
                         break;
                     case "bfm":
-                        building.BackFloorMiddle.Add(MyConvert.ToBfm(mesh));
+                        building.BackFloorMiddle.Add(mesh);
                         break;
                     case "bfr":
-                        building.BackFloorRight.Add(MyConvert.ToBfr(mesh));
+                        building.BackFloorRight.Add(mesh);
                         break;
                     case "bll":
-                        building.BackLevelLeft.Add(MyConvert.ToBll(mesh));
+                        building.BackLevelLeft.Add(mesh);
                         break;
                     case "blm":
-                        building.BackLevelMiddle.Add(MyConvert.ToBlm(mesh));
+                        building.BackLevelMiddle.Add(mesh);
                         break;
                     case "blr":
-                        building.BackLevelRight.Add(MyConvert.ToBlr(mesh));
+                        building.BackLevelRight.Add(mesh);
                         break;
                     case "fl":
-                        building.FloorLeft.Add(MyConvert.ToFl(mesh));
+                        building.FloorLeft.Add(mesh);
                         break;
                     case "fm":
-                        building.FloorMiddle.Add(MyConvert.ToFm(mesh));
+                        building.FloorMiddle.Add(mesh);
                         break;
                     case "fr":
-                        building.FloorRight.Add(MyConvert.ToFr(mesh));
+                        building.FloorRight.Add(mesh);
                         break;
                     case "fsl":
-                        building.FloorSideLeft.Add(MyConvert.ToFsl(mesh));
+                        building.FloorSideLeft.Add(mesh);
                         break;
                     case "fsr":
-                        building.FloorSideRight.Add(MyConvert.ToFsr(mesh));
+                        building.FloorSideRight.Add(mesh);
                         break;
                     case "ll":
-                        building.LevelLeft.Add(MyConvert.ToLl(mesh));
+                        building.LevelLeft.Add(mesh);
                         break;
                     case "lm":
-                        building.LevelMiddle.Add(MyConvert.ToLm(mesh));
+                        building.LevelMiddle.Add(mesh);
                         break;
                     case "lr":
-                        building.LevelRight.Add(MyConvert.ToLr(mesh));
+                        building.LevelRight.Add(mesh);
                         break;
                     case "lsl":
-                        building.LevelSideLeft.Add(MyConvert.ToLsl(mesh));
+                        building.LevelSideLeft.Add(mesh);
                         break;
                     case "lsr":
-                        building.LevelSideRight.Add(MyConvert.ToLsr(mesh));
+                        building.LevelSideRight.Add(mesh);
                         break;
                     case "rbl":
-                        building.RoofBackLeft.Add(MyConvert.ToRbl(mesh));
+                        building.RoofBackLeft.Add(mesh);
                         break;
                     case "rbm":
-                        building.RoofBackMiddle.Add(MyConvert.ToRbm(mesh));
+                        building.RoofBackMiddle.Add(mesh);
                         break;
                     case "rbr":
-                        building.RoofBackRight.Add(MyConvert.ToRbr(mesh));
+                        building.RoofBackRight.Add(mesh);
                         break;
                     case "rl":
-                        building.RoofLeft.Add(MyConvert.ToRl(mesh));
+                        building.RoofLeft.Add(mesh);
                         break;
                     case "rm":
-                        building.RoofMiddle.Add(MyConvert.ToRm(mesh));
+                        building.RoofMiddle.Add(mesh);
                         break;
                     case "rr":
-                        building.RoofRight.Add(MyConvert.ToRr(mesh));
+                        building.RoofRight.Add(mesh);
                         break;
                     case "rsl":
-                        building.RoofSideLeft.Add(MyConvert.ToRsl(mesh));
+                        building.RoofSideLeft.Add(mesh);
                         break;
                     case "rsr":
-                        building.RoofSideRight.Add(MyConvert.ToRsr(mesh));
+                        building.RoofSideRight.Add(mesh);
                         break;
                     case "rfr":
-                        building.RoofFloorRight.Add(MyConvert.ToRfr(mesh));
+                        building.RoofFloorRight.Add(mesh);
                         break;
                     case "rfl":
-                        building.RoofFloorLeft.Add(MyConvert.ToRfl(mesh));
+                        building.RoofFloorLeft.Add(mesh);
                         break;
                     case "rfm":
-                        building.RoofFloorMiddle.Add(MyConvert.ToRfm(mesh));
+                        building.RoofFloorMiddle.Add(mesh);
                         break;
                 }
             }
@@ -376,16 +358,7 @@ namespace AC
         /// </summary>
         public static void ResetTmpBaseMeshes()
         {
-            StaticResources.TmpBaseMeshes.Clear();
-        }
-
-        //------------------------------------------------------------------------------------------------------------//
-        /// <summary>
-        /// this methode rest the TmpMeshTypesList list
-        /// </summary>
-        public static void ResetTmpMeshTypesList()
-        {
-            StaticResources.TmpMeshTypesList.Clear();
+            StaticResources.TmpMeshesType.Clear();
         }
 
         //------------------------------------------------------------------------------------------------------------//
@@ -400,34 +373,6 @@ namespace AC
                 StaticResources.BuildingsList.Add(building);
             }
         }
-
-        //------------------------------------------------------------------------------------------------------------//
-        // public static void FirstInitialize(Building building)
-        // {
-        //     GameObject parent = new GameObject(building.Name); // The first GameObject that will act as a parent
-        //     string[] gameObjectNames =
-        //     {
-        //         "bfl", "bfm", "bfr", "bll", "blm", "blr", "fl", "fm", "fr", "fsl", "fsr", "ll", "lm", "lr", "lsl",
-        //         "lsr", "rbl", "rbm", "rbr", "rl", "rm", "rr", "rsl", "rsr", "rfr", "rfl", "rfm"
-        //     };
-        //     foreach (var type in gameObjectNames)
-        //     {
-        //         foreach (PropertyInfo property in building.GetType().GetProperties())
-        //         {
-        //
-        //             if (property.PropertyType.IsGenericType)
-        //             {
-        //                 var genericType = property.PropertyType.GetGenericTypeDefinition();
-        //                 if (genericType.Name.ToLower() == type)
-        //                 {
-        //                     var list = (IList)property.GetValue(building);
-        //                     var item = (MeshesType)list[0];
-        //                     item.GameObjectMaker();
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
         public static void FirstInitialize(Building building)
         {
             GameObject parent = new GameObject(building.Name); // The first GameObject that will act as a parent
