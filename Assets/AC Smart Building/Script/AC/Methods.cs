@@ -136,7 +136,7 @@ namespace AC
         /// <returns></returns>
         public static Mesh FbxFinder(string fileName, string fbxFolder)
         {
-            return AssetDatabase.LoadAssetAtPath<Mesh>(fbxFolder + fileName);
+            return(Mesh) AssetDatabase.LoadAssetAtPath(fbxFolder + fileName +".fbx",typeof(Mesh));
         }
 
         //------------------------------------------------------------------------------------------------------------//
@@ -162,37 +162,58 @@ namespace AC
         /// <param name="materialName">The name of the material.</param>
         /// <param name="hasEmissive">Whether or not the material should have emissive properties.</param>
         /// <returns>A list of materials.</returns>
-        public static List<Material> MaterialsMatch(string name, string materialName, bool hasEmissive)
-        {
-            // Create a list to store the materials for the mesh
-            // Get the path to the material folder
-            var materialFolderPath = StaticResources.MaterialPath(name);
-            // Create a list of material names
-            var materialNames = new List<string>();
-            if (!hasEmissive)
-            {
-                // Otherwise, add only one material name to the list
-                materialNames.Add($"{materialName}+LightOff");
-            }
-            else
-            {
-                // If the material has emissive properties, add two material names to the list
-                materialNames.Add($"{materialName}_LightON");
-                materialNames.Add(materialName + "_lightOff");
-            }
+ public static List<Material> MaterialsMatch(string name, string materialName, bool hasEmissive)
+    {
+        // Get the path to the material folder
+        var materialFolderPath = StaticResources.MaterialPath(name);
 
-            // Iterate over the list of material names
-            var materialsOfMesh = (from item in materialNames
-                select materialFolderPath + "M_" + item + ".mat"
-                into materialPath
-                select AssetDatabase.LoadAssetAtPath<Material>(materialPath)
-                into material
-                select material == null ? new Material(Shader.Find($"Standard")) : material).ToList();
-            // Add the material names to the _materialNamesList list
-            _materialNamesList.AddRange(materialNames);
-            // Return the list of materials for the mesh
-            return materialsOfMesh;
+        // Make sure the directory exists
+        if (!Directory.Exists(materialFolderPath))
+        {
+            Directory.CreateDirectory(materialFolderPath);
         }
+
+        var materialNames = new List<string>();
+        var materialsOfMesh = new List<Material>();
+
+        // If the material has emissive properties, add two material names to the list
+        if (hasEmissive)
+        {
+            materialNames.Add($"{materialName}_LightOn");
+            materialNames.Add($"{materialName}_LightOff");
+        }
+        else
+        {
+            // Otherwise, add only the non-emissive material name to the list
+            materialNames.Add($"{materialName}+LightOff");
+        }
+
+        // Iterate over the list of material names
+        foreach (var matName in materialNames)
+        {
+            string materialPath = Path.Combine(materialFolderPath, "M_" + matName + ".mat");
+
+            Material material = AssetDatabase.LoadAssetAtPath<Material>(materialPath);
+
+            if (material == null)
+            {
+                // If the material does not exist, create a new one
+                material = new Material(Shader.Find("Standard"));
+                AssetDatabase.CreateAsset(material, materialPath);
+            }
+            
+            materialsOfMesh.Add(material);
+        }
+
+        // Assuming _materialNamesList is some external list that tracks material names
+        _materialNamesList.AddRange(materialNames);
+
+        // Return the list of materials for the mesh
+        return materialsOfMesh;
+    }
+        
+        
+    
 
         //------------------------------------------------------------------------------------------------------------//
         /// <summary>
@@ -208,8 +229,7 @@ namespace AC
             var textureFolderPath = StaticResources.TexturePath(name);
 
             // Load the material
-            var matOff = AssetDatabase.LoadAssetAtPath<Material>($"{materialFolderPath}{materialName}_lightOff");
-
+            var matOff = AssetDatabase.LoadAssetAtPath<Material>($"{materialFolderPath}{materialName}");
             // Get the list of textures
             var textures = TexturesMatch(materialName, textureFolderPath);
 
@@ -222,7 +242,7 @@ namespace AC
             // If the material has an emissive map, apply it
             if (hasEmissive)
             {
-                var matOn = AssetDatabase.LoadAssetAtPath<Material>($"{materialFolderPath}{materialName}_LightON");
+                var matOn = AssetDatabase.LoadAssetAtPath<Material>($"{materialFolderPath}{materialName}");
 
                 ApplyTexture(matOn, textures, "AlbedoTransparency", "_MainTex");
                 ApplyTexture(matOn, textures, "MetallicSmoothness", "_MetallicGlossMap");
@@ -246,7 +266,7 @@ namespace AC
                 material.SetTexture(propertyName, texture);
             }
         }
-        
+
 
         //------------------------------------------------------------------------------------------------------------//
 
@@ -373,6 +393,7 @@ namespace AC
                 StaticResources.BuildingsList.Add(building);
             }
         }
+
         public static void FirstInitialize(Building building)
         {
             GameObject parent = new GameObject(building.Name); // The first GameObject that will act as a parent
@@ -388,36 +409,91 @@ namespace AC
             // Iterate over all the names
             foreach (var type in gameObjectNames)
             {
-                foreach (var property in properties)
+                switch (type)
                 {
-                    // Check if the property is a generic type and make sure it has generic arguments
-                    if (property.PropertyType.IsGenericType && property.PropertyType.GenericTypeArguments.Length > 0)
-                    {
-                        // Get the generic type of the property
-                        var genericArg = property.PropertyType.GenericTypeArguments[0];
-                        Debug.Log(genericArg);///////////////////////////////////////////////////////
-
-                        // Check if the name of the generic type matches the type we're looking for
-                        if (genericArg.Name.Equals(type, StringComparison.OrdinalIgnoreCase))
-                        {
-                            // Get the list and convert it to an IList for easy access
-                            var list = (IList)property.GetValue(building);
-
-                            // Make sure the list is not empty
-                            if (list != null && list.Count > 0)
-                            {
-                                // Get the first element of the list and try to cast it to MeshesType
-                                if (list[0] is MeshesType item)
-                                {
-                                    // Call the GameObjectMaker method on the MeshesType object
-                                    //item.GameObjectMaker();
-                                }
-                            }
-                        }
-                    }
+                    case "bfl":
+                        building.BackFloorLeft[0].GameObjectMaker(parent);
+                        break;
+                    case "bfm":
+                        building.BackFloorMiddle[0].GameObjectMaker(parent);
+                        break;
+                    case "bfr":
+                        building.BackFloorRight[0].GameObjectMaker(parent);
+                        break;
+                    case "bll":
+                        building.BackLevelLeft[0].GameObjectMaker(parent);
+                        break;
+                    case "blm":
+                        building.BackLevelMiddle[0].GameObjectMaker(parent);
+                        break;
+                    case "blr":
+                        building.BackLevelRight[0].GameObjectMaker(parent);
+                        break;
+                    case "fl":
+                        building.FloorLeft[0].GameObjectMaker(parent);
+                        break;
+                    case "fm":
+                        building.FloorMiddle[0].GameObjectMaker(parent);
+                        break;
+                    case "fr":
+                        building.FloorRight[0].GameObjectMaker(parent);
+                        break;
+                    case "fsl":
+                        building.FloorSideLeft[0].GameObjectMaker(parent);
+                        break;
+                    case "fsr":
+                        building.FloorSideRight[0].GameObjectMaker(parent);
+                        break;
+                    case "ll":
+                        building.LevelLeft[0].GameObjectMaker(parent);
+                        break;
+                    case "lm":
+                        building.LevelMiddle[0].GameObjectMaker(parent);
+                        break;
+                    case "lr":
+                        building.LevelRight[0].GameObjectMaker(parent);
+                        break;
+                    case "lsl":
+                        building.LevelSideLeft[0].GameObjectMaker(parent);
+                        break;
+                    case "lsr":
+                        building.LevelSideRight[0].GameObjectMaker(parent);
+                        break;
+                    case "rbl":
+                        building.RoofBackLeft[0].GameObjectMaker(parent);
+                        break;
+                    case "rbm":
+                        building.RoofBackMiddle[0].GameObjectMaker(parent);
+                        break;
+                    case "rbr":
+                        building.RoofBackRight[0].GameObjectMaker(parent);
+                        break;
+                    case "rl":
+                        building.RoofLeft[0].GameObjectMaker(parent);
+                        break;
+                    case "rm":
+                        building.RoofMiddle[0].GameObjectMaker(parent);
+                        break;
+                    case "rr":
+                        building.RoofRight[0].GameObjectMaker(parent);
+                        break;
+                    case "rsl":
+                        building.RoofSideLeft[0].GameObjectMaker(parent);
+                        break;
+                    case "rsr":
+                        building.RoofSideRight[0].GameObjectMaker(parent);
+                        break;
+                    case "rfr":
+                        building.RoofFloorRight[0].GameObjectMaker(parent);
+                        break;
+                    case "rfl":
+                        building.RoofFloorLeft[0].GameObjectMaker(parent);
+                        break;
+                    case "rfm":
+                        building.RoofFloorMiddle[0].GameObjectMaker(parent);
+                        break;
                 }
             }
         }
-
     }
 }

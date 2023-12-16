@@ -1,16 +1,16 @@
 [
   {
-    "Filename": "SM_Test01_FR",
+    "Filename": "SM_Test01_BLR",
     "MaterialName": "Test01-1",
     "HasEmissiveMap": true,
     "PositionMesh": {
       "x": 0.0,
-      "y": 0.0,
-      "z": 0.0
+      "y": 2.5,
+      "z": -3.0
     },
     "Size": {
       "x": 3.0,
-      "y": 2.5,
+      "y": 3.3,
       "z": 0.0
     }
   },
@@ -19,7 +19,7 @@
     "MaterialName": "Test01-1",
     "HasEmissiveMap": true,
     "PositionMesh": {
-      "x": -3.0,
+      "x": 3.0,
       "y": 0.0,
       "z": 0.0
     },
@@ -34,7 +34,7 @@
     "MaterialName": "Test01-1",
     "HasEmissiveMap": true,
     "PositionMesh": {
-      "x": -5.0,
+      "x": 5.0,
       "y": 0.0,
       "z": 0.0
     },
@@ -45,17 +45,17 @@
     }
   },
   {
-    "Filename": "SM_Test01_FSR",
+    "Filename": "SM_Test01_RFL",
     "MaterialName": "Test01-2",
     "HasEmissiveMap": false,
     "PositionMesh": {
-      "x": 0.0,
-      "y": 0.0,
+      "x": 5.0,
+      "y": 5.8,
       "z": 0.0
     },
     "Size": {
-      "x": 0.0,
-      "y": 2.5,
+      "x": 3.0,
+      "y": 0.0,
       "z": 3.0
     }
   },
@@ -64,7 +64,7 @@
     "MaterialName": "Test01-2",
     "HasEmissiveMap": false,
     "PositionMesh": {
-      "x": -8.0,
+      "x": 8.0,
       "y": 0.0,
       "z": 0.0
     },
@@ -94,7 +94,7 @@
     "MaterialName": "Test01-1",
     "HasEmissiveMap": true,
     "PositionMesh": {
-      "x": -3.0,
+      "x": 3.0,
       "y": 0.0,
       "z": -3.0
     },
@@ -109,7 +109,7 @@
     "MaterialName": "Test01-1",
     "HasEmissiveMap": true,
     "PositionMesh": {
-      "x": -5.0,
+      "x": 5.0,
       "y": 0.0,
       "z": -3.0
     },
@@ -139,7 +139,7 @@
     "MaterialName": "Test01-1",
     "HasEmissiveMap": true,
     "PositionMesh": {
-      "x": -3.0,
+      "x": 3.0,
       "y": 2.5,
       "z": 0.0
     },
@@ -154,7 +154,7 @@
     "MaterialName": "Test01-1",
     "HasEmissiveMap": true,
     "PositionMesh": {
-      "x": -5.0,
+      "x": 5.0,
       "y": 2.5,
       "z": 0.0
     },
@@ -184,7 +184,7 @@
     "MaterialName": "Test01-2",
     "HasEmissiveMap": false,
     "PositionMesh": {
-      "x": -8.0,
+      "x": 8.0,
       "y": 2.5,
       "z": 0.0
     },
@@ -195,18 +195,18 @@
     }
   },
   {
-    "Filename": "SM_Test01_BLR",
-    "MaterialName": "Test01-1",
-    "HasEmissiveMap": true,
+    "Filename": "SM_Test01_RFM",
+    "MaterialName": "Test01-2",
+    "HasEmissiveMap": false,
     "PositionMesh": {
-      "x": 0.0,
-      "y": 2.5,
-      "z": -3.0
+      "x": 3.0,
+      "y": 5.8,
+      "z": 0.0
     },
     "Size": {
-      "x": 3.0,
-      "y": 3.3,
-      "z": 0.0
+      "x": 2.0,
+      "y": 0.0,
+      "z": 3.0
     }
   },
   {
@@ -214,7 +214,7 @@
     "MaterialName": "Test01-1",
     "HasEmissiveMap": true,
     "PositionMesh": {
-      "x": -3.0,
+      "x": 3.0,
       "y": 2.5,
       "z": -3.0
     },
@@ -229,7 +229,7 @@
     "MaterialName": "Test01-1",
     "HasEmissiveMap": true,
     "PositionMesh": {
-      "x": -5.0,
+      "x": 5.0,
       "y": 2.5,
       "z": -3.0
     },
@@ -259,7 +259,7 @@
     "MaterialName": "Test01-1",
     "HasEmissiveMap": true,
     "PositionMesh": {
-      "x": -3.0,
+      "x": 3.0,
       "y": 5.8,
       "z": 0.0
     },
@@ -274,7 +274,7 @@
     "MaterialName": "Test01-1",
     "HasEmissiveMap": true,
     "PositionMesh": {
-      "x": -5.0,
+      "x": 5.0,
       "y": 5.8,
       "z": 0.0
     },
@@ -300,17 +300,17 @@
     }
   },
   {
-    "Filename": "SM_Test01_RFL",
+    "Filename": "SM_Test01_RSL",
     "MaterialName": "Test01-2",
     "HasEmissiveMap": false,
     "PositionMesh": {
-      "x": -5.0,
+      "x": 8.0,
       "y": 5.8,
       "z": 0.0
     },
     "Size": {
-      "x": 3.0,
-      "y": 0.0,
+      "x": 0.0,
+      "y": 0.5,
       "z": 3.0
     }
   },
@@ -325,6 +325,36 @@
     },
     "Size": {
       "x": 3.0,
+      "y": 0.5,
+      "z": 0.0
+    }
+  },
+  {
+    "Filename": "SM_Test01_RBL",
+    "MaterialName": "Test01-1",
+    "HasEmissiveMap": true,
+    "PositionMesh": {
+      "x": 5.0,
+      "y": 5.8,
+      "z": -3.0
+    },
+    "Size": {
+      "x": 3.0,
+      "y": 0.5,
+      "z": 0.0
+    }
+  },
+  {
+    "Filename": "SM_Test01_RBM",
+    "MaterialName": "Test01-1",
+    "HasEmissiveMap": true,
+    "PositionMesh": {
+      "x": 3.0,
+      "y": 5.8,
+      "z": -3.0
+    },
+    "Size": {
+      "x": 2.0,
       "y": 0.5,
       "z": 0.0
     }
@@ -345,63 +375,33 @@
     }
   },
   {
-    "Filename": "SM_Test01_RBM",
+    "Filename": "SM_Test01_FR",
     "MaterialName": "Test01-1",
     "HasEmissiveMap": true,
     "PositionMesh": {
-      "x": -3.0,
-      "y": 5.8,
-      "z": -3.0
-    },
-    "Size": {
-      "x": 2.0,
-      "y": 0.5,
-      "z": 0.0
-    }
-  },
-  {
-    "Filename": "SM_Test01_RFM",
-    "MaterialName": "Test01-2",
-    "HasEmissiveMap": false,
-    "PositionMesh": {
-      "x": -3.0,
-      "y": 5.8,
-      "z": 0.0
-    },
-    "Size": {
-      "x": 2.0,
+      "x": 0.0,
       "y": 0.0,
-      "z": 3.0
+      "z": 0.0
+    },
+    "Size": {
+      "x": 3.0,
+      "y": 2.5,
+      "z": 0.0
     }
   },
   {
-    "Filename": "SM_Test01_RSL",
+    "Filename": "SM_Test01_FSR",
     "MaterialName": "Test01-2",
     "HasEmissiveMap": false,
     "PositionMesh": {
-      "x": -8.0,
-      "y": 5.8,
+      "x": 0.0,
+      "y": 0.0,
       "z": 0.0
     },
     "Size": {
       "x": 0.0,
-      "y": 0.5,
+      "y": 2.5,
       "z": 3.0
-    }
-  },
-  {
-    "Filename": "SM_Test01_RBL",
-    "MaterialName": "Test01-1",
-    "HasEmissiveMap": true,
-    "PositionMesh": {
-      "x": -5.0,
-      "y": 5.8,
-      "z": -3.0
-    },
-    "Size": {
-      "x": 3.0,
-      "y": 0.5,
-      "z": 0.0
     }
   }
 ]

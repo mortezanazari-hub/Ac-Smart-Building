@@ -11,7 +11,7 @@ namespace AC
         public Vector3 Size { get; set; }
         public Vector3 PositionMesh { get; set; }
 
-        public MeshesType(string filename, string materialName, bool hasEmissiveMap, Point3 size, Point3 positionMesh)
+        public MeshesType(string filename, string materialName, bool hasEmissiveMap, Vector3 size, Vector3 positionMesh)
         {
             Name = Methods.NameFinder(filename, "name");
             Type = Methods.NameFinder(filename, "type");
@@ -21,49 +21,22 @@ namespace AC
             HasLight = hasEmissiveMap;
             Textures = Methods.TexturesMatch(materialName, StaticResources.TexturePath(Name));
             Fbx = Methods.FbxFinder(filename, StaticResources.FbxPath(Name));
-            Materials = Methods.MaterialsMatch(Methods.NameFinder(filename, "name"), materialName, hasEmissiveMap);
+            Materials = Methods.MaterialsMatch(Name, materialName, hasEmissiveMap);
         }
 
 
-        public GameObject GameObjectMaker()
+        public GameObject GameObjectMaker(GameObject parent)
         {
             var go = new GameObject();
-            go.name = Name;
+            go.transform.parent = parent.transform;
+            go.name = $"{Name}_{Variation}_{Type}";
             go.transform.position = Position;
             go.AddComponent<MeshFilter>().mesh = Fbx;
-            go.AddComponent<MeshRenderer>().material = Materials[0];
+            var meshRender = go.AddComponent<MeshRenderer>();
+            meshRender.material = Materials[0];
+            Methods.TextureMatchToMaterial(Name,Materials[0].name,HasLight);
+            
             return go;
-        }
-    }
-
-
-    public abstract class Point3
-    {
-        public double x { get; set; }
-        public double y { get; set; }
-        public double z { get; set; }
-
-        public Point3(double x, double y, double z)
-        {
-            this.x = x;
-            this.y = y;
-            this.z = z;
-        }
-
-        public static implicit operator Vector3(Point3 point)
-        {
-            var vector3 = new Vector3
-            {
-                x = (float)point.x,
-                y = (float)point.y,
-                z = (float)point.z
-            };
-            return vector3;
-        }
-
-        public override string ToString()
-        {
-            return $"X:{x},Y:{y},Z:{z}";
         }
     }
 }
