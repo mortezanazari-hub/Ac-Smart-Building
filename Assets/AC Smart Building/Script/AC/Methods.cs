@@ -136,7 +136,7 @@ namespace AC
         /// <returns></returns>
         public static Mesh FbxFinder(string fileName, string fbxFolder)
         {
-            return(Mesh) AssetDatabase.LoadAssetAtPath(fbxFolder + fileName +".fbx",typeof(Mesh));
+            return (Mesh)AssetDatabase.LoadAssetAtPath(fbxFolder + fileName + ".fbx", typeof(Mesh));
         }
 
         //------------------------------------------------------------------------------------------------------------//
@@ -146,12 +146,25 @@ namespace AC
         /// <param name="materialName">the material name</param>
         /// <param name="textureFolder">the texture folder</param>
         /// <returns></returns>
+        // public static List<Texture2D> TexturesMatch(string materialName, string textureFolder)
+        // {
+        //     return Directory.GetFiles(textureFolder)
+        //         .Where(t => t.Contains(materialName))
+        //         .Select(t => AssetDatabase.LoadAssetAtPath<Texture2D>(textureFolder + t))
+        //         .ToList();
+        // }
         public static List<Texture2D> TexturesMatch(string materialName, string textureFolder)
         {
-            return Directory.GetFiles(textureFolder)
-                .Where(t => t.Contains(materialName))
-                .Select(t => AssetDatabase.LoadAssetAtPath<Texture2D>(textureFolder + t))
-                .ToList();
+            var textures = new List<Texture2D>();
+            var texturesPaths = Directory.GetFiles(textureFolder).ToList().FindAll(t => t.Contains(materialName))
+                .FindAll(t => t.EndsWith(".png"));
+            foreach (var tPath in texturesPaths)
+            {
+                var texture = AssetDatabase.LoadAssetAtPath<Texture2D>(tPath);
+                textures.Add(texture);
+            }
+
+            return textures;
         }
 
         //------------------------------------------------------------------------------------------------------------//
@@ -162,95 +175,78 @@ namespace AC
         /// <param name="materialName">The name of the material.</param>
         /// <param name="hasEmissive">Whether or not the material should have emissive properties.</param>
         /// <returns>A list of materials.</returns>
- public static List<Material> MaterialsMatch(string name, string materialName, bool hasEmissive)
-    {
-        // Get the path to the material folder
-        var materialFolderPath = StaticResources.MaterialPath(name);
-
-        // Make sure the directory exists
-        if (!Directory.Exists(materialFolderPath))
+        public static List<Material> MaterialsMatch(string name, string materialName, bool hasEmissive)
         {
-            Directory.CreateDirectory(materialFolderPath);
-        }
-
-        var materialNames = new List<string>();
-        var materialsOfMesh = new List<Material>();
-
-        // If the material has emissive properties, add two material names to the list
-        if (hasEmissive)
-        {
-            materialNames.Add($"{materialName}_LightOn");
-            materialNames.Add($"{materialName}_LightOff");
-        }
-        else
-        {
-            // Otherwise, add only the non-emissive material name to the list
-            materialNames.Add($"{materialName}+LightOff");
-        }
-
-        // Iterate over the list of material names
-        foreach (var matName in materialNames)
-        {
-            string materialPath = Path.Combine(materialFolderPath, "M_" + matName + ".mat");
-
-            Material material = AssetDatabase.LoadAssetAtPath<Material>(materialPath);
-
-            if (material == null)
-            {
-                // If the material does not exist, create a new one
-                material = new Material(Shader.Find("Standard"));
-                AssetDatabase.CreateAsset(material, materialPath);
-            }
-            
-            materialsOfMesh.Add(material);
-        }
-
-        // Assuming _materialNamesList is some external list that tracks material names
-        _materialNamesList.AddRange(materialNames);
-
-        // Return the list of materials for the mesh
-        return materialsOfMesh;
-    }
-        
-        
-    
-
-        //------------------------------------------------------------------------------------------------------------//
-        /// <summary>
-        /// This method can assign texture to Material
-        /// </summary>
-        /// <param name="name">name of building</param>
-        /// <param name="materialName">name of material</param>
-        /// <param name="hasEmissive">has emissive that material?</param>
-        public static void TextureMatchToMaterial(string name, string materialName, bool hasEmissive)
-        {
-            // Get the paths to the material and texture folders
+            // Get the path to the material folder
             var materialFolderPath = StaticResources.MaterialPath(name);
-            var textureFolderPath = StaticResources.TexturePath(name);
+            // Make sure the directory exists
+            if (!Directory.Exists(materialFolderPath))
+            {
+                Directory.CreateDirectory(materialFolderPath);
+            }
 
-            // Load the material
-            var matOff = AssetDatabase.LoadAssetAtPath<Material>($"{materialFolderPath}{materialName}");
-            // Get the list of textures
-            var textures = TexturesMatch(materialName, textureFolderPath);
-
-            // Apply the textures to the material
-            ApplyTexture(matOff, textures, "AlbedoTransparency", "_MainTex");
-            ApplyTexture(matOff, textures, "MetallicSmoothness", "_MetallicGlossMap");
-            ApplyTexture(matOff, textures, "Normal", "_BumpMap");
-            ApplyTexture(matOff, textures, "Ao", "_OcclusionMap");
-
-            // If the material has an emissive map, apply it
+            var materialNames = new List<string>();
+            var materialsOfMesh = new List<Material>();
+            // If the material has emissive properties, add two material names to the list
             if (hasEmissive)
             {
-                var matOn = AssetDatabase.LoadAssetAtPath<Material>($"{materialFolderPath}{materialName}");
+                materialNames.Add($"{materialName}_LightOn");
+                materialNames.Add($"{materialName}_LightOff");
+            }
+            else
+            {
+                // Otherwise, add only the non-emissive material name to the list
+                materialNames.Add($"{materialName}+LightOff");
+            }
 
-                ApplyTexture(matOn, textures, "AlbedoTransparency", "_MainTex");
-                ApplyTexture(matOn, textures, "MetallicSmoothness", "_MetallicGlossMap");
-                ApplyTexture(matOn, textures, "Normal", "_BumpMap");
-                ApplyTexture(matOn, textures, "Emission", "_EmissionMap");
+            // Iterate over the list of material names
+            foreach (var matName in materialNames)
+            {
+                string materialPath = Path.Combine(materialFolderPath, "M_" + matName + ".mat");
+                Material material = AssetDatabase.LoadAssetAtPath<Material>(materialPath);
+                if (material == null)
+                {
+                    // If the material does not exist, create a new one
+                    material = new Material(Shader.Find("Standard"));
+                    AssetDatabase.CreateAsset(material, materialPath);
+                }
 
-                matOn.EnableKeyword("_EMISSION");
-                ApplyTexture(matOn, textures, "Ao", "_OcclusionMap");
+                materialsOfMesh.Add(material);
+            }
+
+            // Assuming _materialNamesList is some external list that tracks material names
+            _materialNamesList.AddRange(materialNames);
+            // Return the list of materials for the mesh
+            return materialsOfMesh;
+        }
+
+
+        //------------------------------------------------------------------------------------------------------------//
+
+        public static void TextureMatchToMaterial(string materialName, List<Texture2D> textures, Material material)
+        {
+            // Get the paths to the material and texture folders
+
+            var fullMaterialName = materialName;
+            materialName = materialName.Replace("_LightOff", "");
+            materialName = materialName.Replace("_LightOn", "");
+            materialName = materialName.Remove(0, 2);
+            if (fullMaterialName.Contains("LightOff"))
+            {
+                ApplyTexture(material, textures, "AlbedoTransparency", "_MainTex");
+                ApplyTexture(material, textures, "MetallicSmoothness", "_MetallicGlossMap");
+                ApplyTexture(material, textures, "Normal", "_BumpMap");
+                ApplyTexture(material, textures, "Ao", "_OcclusionMap");
+            }
+            else
+            {
+                ApplyTexture(material, textures, "AlbedoTransparency", "_MainTex");
+                ApplyTexture(material, textures, "MetallicSmoothness", "_MetallicGlossMap");
+                ApplyTexture(material, textures, "Normal", "_BumpMap");
+                material.EnableKeyword("_EMISSION");
+                material.SetColor("_EmissionColor", Color.white);
+                ApplyTexture(material, textures, "Emission", "_EmissionMap");
+                ApplyTexture(material, textures, "Ao", "_OcclusionMap");
             }
         }
 

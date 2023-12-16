@@ -33,8 +33,24 @@ namespace AC
             go.transform.position = Position;
             go.AddComponent<MeshFilter>().mesh = Fbx;
             var meshRender = go.AddComponent<MeshRenderer>();
-            meshRender.material = Materials[0];
-            Methods.TextureMatchToMaterial(Name,Materials[0].name,HasLight);
+            
+            if (HasLight)
+            {
+                var matOff= Materials.Find(m =>m.name.Contains("LightOff"));
+                Methods.TextureMatchToMaterial(matOff.name,Textures,matOff);
+                
+               var matOn= Materials.Find(m =>m.name.Contains("LightOn"));
+               meshRender.material = matOn;
+               Methods.TextureMatchToMaterial(matOn.name,Textures,matOn); 
+
+
+            }
+            else
+            {
+                var matOff= Materials.Find(m =>m.name.Contains("LightOff"));
+                meshRender.material = matOff;
+                Methods.TextureMatchToMaterial(matOff.name,Textures,matOff);
+            }
             
             return go;
         }
