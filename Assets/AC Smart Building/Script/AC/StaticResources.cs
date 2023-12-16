@@ -5,8 +5,29 @@ namespace AC
     public static class StaticResources
     {
         public static List<Building> BuildingsList = new List<Building>();
-        public static List<TmpMeshType> TmpMeshTypes = new List<TmpMeshType>();
+        public static List<TmpMeshType> TmpMeshTypesList = new List<TmpMeshType>();
         public static List<MeshesType> TmpBaseMeshes = new List<MeshesType>();
-        
+        public static List<string> BuildingsNameList = new List<string>();
+        public const string ContentPath = "Assets/AC Smart Building/Resource/Content/";
+
+        public static string TexturePath(string name)
+        {
+            return $"{ContentPath}{name}/Texture/";
+        }
+
+        public static string FbxPath(string name)
+        {
+            return $"{ContentPath}{name}/FBX/";
+        }
+
+        public static string MaterialPath(string name)
+        {
+            return $"{ContentPath}{name}/Material/";
+        }
+
+        public static string BuildingPath(string name)
+        {
+            return $"{ContentPath}{name}/";
+        }
     }
 }

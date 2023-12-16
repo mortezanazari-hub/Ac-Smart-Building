@@ -32,7 +32,7 @@ namespace AC
         {
             var root = rootVisualElement;
             var visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(
-                "Assets/Ac_Building_System/Resource/Ui Documents/ImageAlphaEditorWindow.uxml");
+                "Assets/AC Smart Building/Resource/Ui Documents/ImageAlphaEditorWindow.uxml");
             var tree = visualTree.Instantiate();
             root.Add(tree);
             //-----------------------------------------------------------------------------------------//
@@ -58,11 +58,11 @@ namespace AC
         {
             return _typeSelected = str;
         }
-
-        private void ActionSomething()
+        [MenuItem("Tools/Test")]
+        private static void ActionSomething()
         {
-            var m1 = new MyMesh(_typeSelected);
-            m1.GameObjectMake();
+            Automation.AutoMakeBuilding();
+            Methods.FirstInitialize(StaticResources.BuildingsList[0]);
         }
     }
 }

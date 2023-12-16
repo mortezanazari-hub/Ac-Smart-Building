@@ -4,67 +4,47 @@ using System.Collections.Generic;
 
 namespace AC
 {
+    
     public class Building : BaseMesh
     {
-        public List<Bfl> BackFloorLeft { get; set; } // Back Floor Left
-        public List<Bfm> BackFloorMiddle { get; set; } // Back Floor Middle
-        public List<Bfr> BackFloorRight { get; set; } // Back Floor Right
-        public List<Bll> BackLevelLeft { get; set; } // Back Level Left
-        public List<Blm> BackLevelMiddle { get; set; } // Back Level Middle
-        public List<Blr> BackLevelRight { get; set; } // Back Level Right
-        public List<Fl> FloorLeft { get; set; } // Floor Left
-        public List<Fm> FloorMiddle { get; set; } // Floor Middle
-        public List<Fr> FloorRight { get; set; } // Floor Right
-        public List<Fsl> FloorSideLeft { get; set; } // Floor Side Left
-        public List<Fsr> FloorSideRight { get; set; } // Floor Side Right
-        public List<Ll> LevelLeft { get; set; } // Level Left
-        public List<Lm> LevelMiddle { get; set; } // Level Middle
-        public List<Lr> LevelRight { get; set; } // Level Right
-        public List<Lsl> LevelSideLeft { get; set; } // Level Side Left
-        public List<Lsr> LevelSideRight { get; set; } // Level Side Right
-        public List<Rbl> RoofBackLeft { get; set; } // Roof Back Left
-        public List<Rbm> RoofBackMiddle { get; set; } // Roof Back Middle
-        public List<Rbr> RoofBackRight { get; set; } // Roof Back Right
-        public List<Rl> RoofLeft { get; set; } // Roof Left
-        public List<Rm> RoofMiddle { get; set; } // Roof Middle
-        public List<Rr> RoofRight { get; set; } // Roof Right
-        public List<Rsl> RoofSideLeft { get; set; } // Roof Side Left
-        public List<Rsr> RoofSideRight { get; set; } // Roof Side Right
-        public List<Rfr> RoofFloorRight { get; set; } // Roof Floor Right
-        public List<Rfl> RoofFloorLeft { get; set; } // Roof Floor Left
-        public List<Rfm> RoofFloorMiddle { get; set; } // Roof Floor Middle
+        
+        public List<MeshesType> BackFloorLeft { get; set; } // Back Floor Left
+        public List<MeshesType> BackFloorMiddle { get; set; } // Back Floor Middle
+        public List<MeshesType> BackFloorRight { get; set; } // Back Floor Right
+        public List<MeshesType> BackLevelLeft { get; set; } // Back Level Left
+        public List<MeshesType> BackLevelMiddle { get; set; } // Back Level Middle
+        public List<MeshesType> BackLevelRight { get; set; } // Back Level Right
+        public List<MeshesType> FloorLeft { get; set; } // Floor Left
+        public List<MeshesType> FloorMiddle { get; set; } // Floor Middle
+        public List<MeshesType> FloorRight { get; set; } // Floor Right
+        public List<MeshesType> FloorSideLeft { get; set; } // Floor Side Left
+        public List<MeshesType> FloorSideRight { get; set; } // Floor Side Right
+        public List<MeshesType> LevelLeft { get; set; } // Level Left
+        public List<MeshesType> LevelMiddle { get; set; } // Level Middle
+        public List<MeshesType> LevelRight { get; set; } // Level Right
+        public List<MeshesType> LevelSideLeft { get; set; } // Level Side Left
+        public List<MeshesType> LevelSideRight { get; set; } // Level Side Right
+        public List<MeshesType> RoofBackLeft { get; set; } // Roof Back Left
+        public List<MeshesType> RoofBackMiddle { get; set; } // Roof Back Middle
+        public List<MeshesType> RoofBackRight { get; set; } // Roof Back Right
+        public List<MeshesType> RoofLeft { get; set; } // Roof Left
+        public List<MeshesType> RoofMiddle { get; set; } // Roof Middle
+        public List<MeshesType> RoofRight { get; set; } // Roof Right
+        public List<MeshesType> RoofSideLeft { get; set; } // Roof Side Left
+        public List<MeshesType> RoofSideRight { get; set; } // Roof Side Right
+        public List<MeshesType> RoofFloorRight { get; set; } // Roof Floor Right
+        public List<MeshesType> RoofFloorLeft { get; set; } // Roof Floor Left
+        public List<MeshesType> RoofFloorMiddle { get; set; } // Roof Floor Middle
 
         public Building()
         {
-             if (false) return;
-            BackFloorLeft = new List<Bfl>(); 
-            BackFloorMiddle = new List<Bfm>(); 
-            BackFloorRight = new List<Bfr>(); 
-            BackLevelLeft = new List<Bll>(); 
-            BackLevelMiddle = new List<Blm>(); 
-            BackLevelRight = new List<Blr>(); 
-            FloorLeft = new List<Fl>(); 
-            FloorMiddle = new List<Fm>(); 
-            FloorRight = new List<Fr>(); 
-            FloorSideLeft = new List<Fsl>(); 
-            FloorSideRight = new List<Fsr>(); 
-            LevelLeft = new List<Ll>(); 
-            LevelMiddle = new List<Lm>(); 
-            LevelRight = new List<Lr>(); 
-            LevelSideLeft = new List<Lsl>(); 
-            LevelSideRight = new List<Lsr>(); 
-            RoofBackLeft = new List<Rbl>(); 
-            RoofBackMiddle = new List<Rbm>(); 
-            RoofBackRight = new List<Rbr>(); 
-            RoofLeft = new List<Rl>(); 
-            RoofMiddle = new List<Rm>(); 
-            RoofRight = new List<Rr>(); 
-            RoofSideLeft = new List<Rsl>(); 
-            RoofSideRight = new List<Rsr>(); 
-            RoofFloorRight = new List<Rfr>(); 
-            RoofFloorLeft = new List<Rfl>(); 
-            RoofFloorMiddle = new List<Rfm>();
-
+            foreach (var property in this.GetType().GetProperties())
+            {
+                if (property.PropertyType == typeof(List<MeshesType>))
+                {
+                    property.SetValue(this, new List<MeshesType>());
+                }
+            }
         }
     }
 }

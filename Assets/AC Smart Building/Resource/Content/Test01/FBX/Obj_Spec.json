@@ -1,407 +1,407 @@
 [
-{
-"Filename": "SM_Test01_FR",
-"MaterialName": "Test01-1",
-"HasEmissiveMap": true,
-"Position": {
-"x": 0.0,
-"y": 0.0,
-"z": 0.0
-},
-"Size": {
-"x": 3.0,
-"y": 2.5,
-"z": 0.0
-}
-,
-{
-"Filename": "SM_Test01_FM",
-"MaterialName": "Test01-1",
-"HasEmissiveMap": true,
-"Position": {
-"x": -3.0,
-"y": 0.0,
-"z": 0.0
-},
-"Size": {
-"x": 2.0,
-"y": 2.5,
-"z": 0.0
-}
-,
-{
-"Filename": "SM_Test01_FL",
-"MaterialName": "Test01-1",
-"HasEmissiveMap": true,
-"Position": {
-"x": -5.0,
-"y": 0.0,
-"z": 0.0
-},
-"Size": {
-"x": 3.0,
-"y": 2.5,
-"z": 0.0
-}
-,
-{
-"Filename": "SM_Test01_FSR",
-"MaterialName": "Test01-2",
-"HasEmissiveMap": false,
-"Position": {
-"x": 0.0,
-"y": 0.0,
-"z": 0.0
-},
-"Size": {
-"x": 0.0,
-"y": 2.5,
-"z": 3.0
-}
-,
-{
-"Filename": "SM_Test01_FSL",
-"MaterialName": "Test01-2",
-"HasEmissiveMap": false,
-"Position": {
-"x": -8.0,
-"y": 0.0,
-"z": 0.0
-},
-"Size": {
-"x": 0.0,
-"y": 2.5,
-"z": 3.0
-}
-,
-{
-"Filename": "SM_Test01_BFR",
-"MaterialName": "Test01-1",
-"HasEmissiveMap": true,
-"Position": {
-"x": 0.0,
-"y": 0.0,
-"z": -3.0
-},
-"Size": {
-"x": 3.0,
-"y": 2.5,
-"z": 0.0
-}
-,
-{
-"Filename": "SM_Test01_BFM",
-"MaterialName": "Test01-1",
-"HasEmissiveMap": true,
-"Position": {
-"x": -3.0,
-"y": 0.0,
-"z": -3.0
-},
-"Size": {
-"x": 2.0,
-"y": 2.5,
-"z": 0.0
-}
-,
-{
-"Filename": "SM_Test01_BFL",
-"MaterialName": "Test01-1",
-"HasEmissiveMap": true,
-"Position": {
-"x": -5.0,
-"y": 0.0,
-"z": -3.0
-},
-"Size": {
-"x": 3.0,
-"y": 2.5,
-"z": 0.0
-}
-,
-{
-"Filename": "SM_Test01_LR",
-"MaterialName": "Test01-1",
-"HasEmissiveMap": true,
-"Position": {
-"x": 0.0,
-"y": 2.5,
-"z": 0.0
-},
-"Size": {
-"x": 3.0,
-"y": 3.3,
-"z": 0.0
-}
-,
-{
-"Filename": "SM_Test01_LM",
-"MaterialName": "Test01-1",
-"HasEmissiveMap": true,
-"Position": {
-"x": -3.0,
-"y": 2.5,
-"z": 0.0
-},
-"Size": {
-"x": 2.0,
-"y": 3.3,
-"z": 0.0
-}
-,
-{
-"Filename": "SM_Test01_LL",
-"MaterialName": "Test01-1",
-"HasEmissiveMap": true,
-"Position": {
-"x": -5.0,
-"y": 2.5,
-"z": 0.0
-},
-"Size": {
-"x": 3.0,
-"y": 3.3,
-"z": 0.0
-}
-,
-{
-"Filename": "SM_Test01_LSR",
-"MaterialName": "Test01-2",
-"HasEmissiveMap": false,
-"Position": {
-"x": 0.0,
-"y": 2.5,
-"z": 0.0
-},
-"Size": {
-"x": 0.0,
-"y": 3.3,
-"z": 3.0
-}
-,
-{
-"Filename": "SM_Test01_LSL",
-"MaterialName": "Test01-2",
-"HasEmissiveMap": false,
-"Position": {
-"x": -8.0,
-"y": 2.5,
-"z": 0.0
-},
-"Size": {
-"x": 0.0,
-"y": 3.3,
-"z": 3.0
-}
-,
-{
-"Filename": "SM_Test01_BLR",
-"MaterialName": "Test01-1",
-"HasEmissiveMap": true,
-"Position": {
-"x": 0.0,
-"y": 2.5,
-"z": -3.0
-},
-"Size": {
-"x": 3.0,
-"y": 3.3,
-"z": 0.0
-}
-,
-{
-"Filename": "SM_Test01_BLM",
-"MaterialName": "Test01-1",
-"HasEmissiveMap": true,
-"Position": {
-"x": -3.0,
-"y": 2.5,
-"z": -3.0
-},
-"Size": {
-"x": 2.0,
-"y": 3.3,
-"z": 0.0
-}
-,
-{
-"Filename": "SM_Test01_BLL",
-"MaterialName": "Test01-1",
-"HasEmissiveMap": true,
-"Position": {
-"x": -5.0,
-"y": 2.5,
-"z": -3.0
-},
-"Size": {
-"x": 3.0,
-"y": 3.3,
-"z": 0.0
-}
-,
-{
-"Filename": "SM_Test01_RR",
-"MaterialName": "Test01-1",
-"HasEmissiveMap": true,
-"Position": {
-"x": 0.0,
-"y": 5.8,
-"z": 0.0
-},
-"Size": {
-"x": 3.0,
-"y": 0.5,
-"z": 0.0
-}
-,
-{
-"Filename": "SM_Test01_RM",
-"MaterialName": "Test01-1",
-"HasEmissiveMap": true,
-"Position": {
-"x": -3.0,
-"y": 5.8,
-"z": 0.0
-},
-"Size": {
-"x": 2.0,
-"y": 0.5,
-"z": 0.0
-}
-,
-{
-"Filename": "SM_Test01_RL",
-"MaterialName": "Test01-1",
-"HasEmissiveMap": true,
-"Position": {
-"x": -5.0,
-"y": 5.8,
-"z": 0.0
-},
-"Size": {
-"x": 3.0,
-"y": 0.5,
-"z": 0.0
-}
-,
-{
-"Filename": "SM_Test01_RSR",
-"MaterialName": "Test01-2",
-"HasEmissiveMap": false,
-"Position": {
-"x": 0.0,
-"y": 5.8,
-"z": 0.0
-},
-"Size": {
-"x": 0.0,
-"y": 0.5,
-"z": 3.0
-}
-,
-{
-"Filename": "SM_Test01_RFL",
-"MaterialName": "Test01-2",
-"HasEmissiveMap": false,
-"Position": {
-"x": -5.0,
-"y": 5.8,
-"z": 0.0
-},
-"Size": {
-"x": 3.0,
-"y": 0.0,
-"z": 3.0
-}
-,
-{
-"Filename": "SM_Test01_RBR",
-"MaterialName": "Test01-1",
-"HasEmissiveMap": true,
-"Position": {
-"x": 0.0,
-"y": 5.8,
-"z": -3.0
-},
-"Size": {
-"x": 3.0,
-"y": 0.5,
-"z": 0.0
-}
-,
-{
-"Filename": "SM_Test01_RFR",
-"MaterialName": "Test01-2",
-"HasEmissiveMap": false,
-"Position": {
-"x": 0.0,
-"y": 5.8,
-"z": 0.0
-},
-"Size": {
-"x": 3.0,
-"y": 0.0,
-"z": 3.0
-}
-,
-{
-"Filename": "SM_Test01_RBM",
-"MaterialName": "Test01-1",
-"HasEmissiveMap": true,
-"Position": {
-"x": -3.0,
-"y": 5.8,
-"z": -3.0
-},
-"Size": {
-"x": 2.0,
-"y": 0.5,
-"z": 0.0
-}
-,
-{
-"Filename": "SM_Test01_RFM",
-"MaterialName": "Test01-2",
-"HasEmissiveMap": false,
-"Position": {
-"x": -3.0,
-"y": 5.8,
-"z": 0.0
-},
-"Size": {
-"x": 2.0,
-"y": 0.0,
-"z": 3.0
-}
-,
-{
-"Filename": "SM_Test01_RSL",
-"MaterialName": "Test01-2",
-"HasEmissiveMap": false,
-"Position": {
-"x": -8.0,
-"y": 5.8,
-"z": 0.0
-},
-"Size": {
-"x": 0.0,
-"y": 0.5,
-"z": 3.0
-}
-,
-{
-"Filename": "SM_Test01_RBL",
-"MaterialName": "Test01-1",
-"HasEmissiveMap": true,
-"Position": {
-"x": -5.0,
-"y": 5.8,
-"z": -3.0
-},
-"Size": {
-"x": 3.0,
-"y": 0.5,
-"z": 0.0
-}
-
+  {
+    "Filename": "SM_Test01_FR",
+    "MaterialName": "Test01-1",
+    "HasEmissiveMap": true,
+    "PositionMesh": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "Size": {
+      "x": 3.0,
+      "y": 2.5,
+      "z": 0.0
+    }
+  },
+  {
+    "Filename": "SM_Test01_FM",
+    "MaterialName": "Test01-1",
+    "HasEmissiveMap": true,
+    "PositionMesh": {
+      "x": -3.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "Size": {
+      "x": 2.0,
+      "y": 2.5,
+      "z": 0.0
+    }
+  },
+  {
+    "Filename": "SM_Test01_FL",
+    "MaterialName": "Test01-1",
+    "HasEmissiveMap": true,
+    "PositionMesh": {
+      "x": -5.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "Size": {
+      "x": 3.0,
+      "y": 2.5,
+      "z": 0.0
+    }
+  },
+  {
+    "Filename": "SM_Test01_FSR",
+    "MaterialName": "Test01-2",
+    "HasEmissiveMap": false,
+    "PositionMesh": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "Size": {
+      "x": 0.0,
+      "y": 2.5,
+      "z": 3.0
+    }
+  },
+  {
+    "Filename": "SM_Test01_FSL",
+    "MaterialName": "Test01-2",
+    "HasEmissiveMap": false,
+    "PositionMesh": {
+      "x": -8.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "Size": {
+      "x": 0.0,
+      "y": 2.5,
+      "z": 3.0
+    }
+  },
+  {
+    "Filename": "SM_Test01_BFR",
+    "MaterialName": "Test01-1",
+    "HasEmissiveMap": true,
+    "PositionMesh": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": -3.0
+    },
+    "Size": {
+      "x": 3.0,
+      "y": 2.5,
+      "z": 0.0
+    }
+  },
+  {
+    "Filename": "SM_Test01_BFM",
+    "MaterialName": "Test01-1",
+    "HasEmissiveMap": true,
+    "PositionMesh": {
+      "x": -3.0,
+      "y": 0.0,
+      "z": -3.0
+    },
+    "Size": {
+      "x": 2.0,
+      "y": 2.5,
+      "z": 0.0
+    }
+  },
+  {
+    "Filename": "SM_Test01_BFL",
+    "MaterialName": "Test01-1",
+    "HasEmissiveMap": true,
+    "PositionMesh": {
+      "x": -5.0,
+      "y": 0.0,
+      "z": -3.0
+    },
+    "Size": {
+      "x": 3.0,
+      "y": 2.5,
+      "z": 0.0
+    }
+  },
+  {
+    "Filename": "SM_Test01_LR",
+    "MaterialName": "Test01-1",
+    "HasEmissiveMap": true,
+    "PositionMesh": {
+      "x": 0.0,
+      "y": 2.5,
+      "z": 0.0
+    },
+    "Size": {
+      "x": 3.0,
+      "y": 3.3,
+      "z": 0.0
+    }
+  },
+  {
+    "Filename": "SM_Test01_LM",
+    "MaterialName": "Test01-1",
+    "HasEmissiveMap": true,
+    "PositionMesh": {
+      "x": -3.0,
+      "y": 2.5,
+      "z": 0.0
+    },
+    "Size": {
+      "x": 2.0,
+      "y": 3.3,
+      "z": 0.0
+    }
+  },
+  {
+    "Filename": "SM_Test01_LL",
+    "MaterialName": "Test01-1",
+    "HasEmissiveMap": true,
+    "PositionMesh": {
+      "x": -5.0,
+      "y": 2.5,
+      "z": 0.0
+    },
+    "Size": {
+      "x": 3.0,
+      "y": 3.3,
+      "z": 0.0
+    }
+  },
+  {
+    "Filename": "SM_Test01_LSR",
+    "MaterialName": "Test01-2",
+    "HasEmissiveMap": false,
+    "PositionMesh": {
+      "x": 0.0,
+      "y": 2.5,
+      "z": 0.0
+    },
+    "Size": {
+      "x": 0.0,
+      "y": 3.3,
+      "z": 3.0
+    }
+  },
+  {
+    "Filename": "SM_Test01_LSL",
+    "MaterialName": "Test01-2",
+    "HasEmissiveMap": false,
+    "PositionMesh": {
+      "x": -8.0,
+      "y": 2.5,
+      "z": 0.0
+    },
+    "Size": {
+      "x": 0.0,
+      "y": 3.3,
+      "z": 3.0
+    }
+  },
+  {
+    "Filename": "SM_Test01_BLR",
+    "MaterialName": "Test01-1",
+    "HasEmissiveMap": true,
+    "PositionMesh": {
+      "x": 0.0,
+      "y": 2.5,
+      "z": -3.0
+    },
+    "Size": {
+      "x": 3.0,
+      "y": 3.3,
+      "z": 0.0
+    }
+  },
+  {
+    "Filename": "SM_Test01_BLM",
+    "MaterialName": "Test01-1",
+    "HasEmissiveMap": true,
+    "PositionMesh": {
+      "x": -3.0,
+      "y": 2.5,
+      "z": -3.0
+    },
+    "Size": {
+      "x": 2.0,
+      "y": 3.3,
+      "z": 0.0
+    }
+  },
+  {
+    "Filename": "SM_Test01_BLL",
+    "MaterialName": "Test01-1",
+    "HasEmissiveMap": true,
+    "PositionMesh": {
+      "x": -5.0,
+      "y": 2.5,
+      "z": -3.0
+    },
+    "Size": {
+      "x": 3.0,
+      "y": 3.3,
+      "z": 0.0
+    }
+  },
+  {
+    "Filename": "SM_Test01_RR",
+    "MaterialName": "Test01-1",
+    "HasEmissiveMap": true,
+    "PositionMesh": {
+      "x": 0.0,
+      "y": 5.8,
+      "z": 0.0
+    },
+    "Size": {
+      "x": 3.0,
+      "y": 0.5,
+      "z": 0.0
+    }
+  },
+  {
+    "Filename": "SM_Test01_RM",
+    "MaterialName": "Test01-1",
+    "HasEmissiveMap": true,
+    "PositionMesh": {
+      "x": -3.0,
+      "y": 5.8,
+      "z": 0.0
+    },
+    "Size": {
+      "x": 2.0,
+      "y": 0.5,
+      "z": 0.0
+    }
+  },
+  {
+    "Filename": "SM_Test01_RL",
+    "MaterialName": "Test01-1",
+    "HasEmissiveMap": true,
+    "PositionMesh": {
+      "x": -5.0,
+      "y": 5.8,
+      "z": 0.0
+    },
+    "Size": {
+      "x": 3.0,
+      "y": 0.5,
+      "z": 0.0
+    }
+  },
+  {
+    "Filename": "SM_Test01_RSR",
+    "MaterialName": "Test01-2",
+    "HasEmissiveMap": false,
+    "PositionMesh": {
+      "x": 0.0,
+      "y": 5.8,
+      "z": 0.0
+    },
+    "Size": {
+      "x": 0.0,
+      "y": 0.5,
+      "z": 3.0
+    }
+  },
+  {
+    "Filename": "SM_Test01_RFL",
+    "MaterialName": "Test01-2",
+    "HasEmissiveMap": false,
+    "PositionMesh": {
+      "x": -5.0,
+      "y": 5.8,
+      "z": 0.0
+    },
+    "Size": {
+      "x": 3.0,
+      "y": 0.0,
+      "z": 3.0
+    }
+  },
+  {
+    "Filename": "SM_Test01_RBR",
+    "MaterialName": "Test01-1",
+    "HasEmissiveMap": true,
+    "PositionMesh": {
+      "x": 0.0,
+      "y": 5.8,
+      "z": -3.0
+    },
+    "Size": {
+      "x": 3.0,
+      "y": 0.5,
+      "z": 0.0
+    }
+  },
+  {
+    "Filename": "SM_Test01_RFR",
+    "MaterialName": "Test01-2",
+    "HasEmissiveMap": false,
+    "PositionMesh": {
+      "x": 0.0,
+      "y": 5.8,
+      "z": 0.0
+    },
+    "Size": {
+      "x": 3.0,
+      "y": 0.0,
+      "z": 3.0
+    }
+  },
+  {
+    "Filename": "SM_Test01_RBM",
+    "MaterialName": "Test01-1",
+    "HasEmissiveMap": true,
+    "PositionMesh": {
+      "x": -3.0,
+      "y": 5.8,
+      "z": -3.0
+    },
+    "Size": {
+      "x": 2.0,
+      "y": 0.5,
+      "z": 0.0
+    }
+  },
+  {
+    "Filename": "SM_Test01_RFM",
+    "MaterialName": "Test01-2",
+    "HasEmissiveMap": false,
+    "PositionMesh": {
+      "x": -3.0,
+      "y": 5.8,
+      "z": 0.0
+    },
+    "Size": {
+      "x": 2.0,
+      "y": 0.0,
+      "z": 3.0
+    }
+  },
+  {
+    "Filename": "SM_Test01_RSL",
+    "MaterialName": "Test01-2",
+    "HasEmissiveMap": false,
+    "PositionMesh": {
+      "x": -8.0,
+      "y": 5.8,
+      "z": 0.0
+    },
+    "Size": {
+      "x": 0.0,
+      "y": 0.5,
+      "z": 3.0
+    }
+  },
+  {
+    "Filename": "SM_Test01_RBL",
+    "MaterialName": "Test01-1",
+    "HasEmissiveMap": true,
+    "PositionMesh": {
+      "x": -5.0,
+      "y": 5.8,
+      "z": -3.0
+    },
+    "Size": {
+      "x": 3.0,
+      "y": 0.5,
+      "z": 0.0
+    }
+  }
 ]

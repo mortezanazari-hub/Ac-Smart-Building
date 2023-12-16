@@ -12,8 +12,38 @@ namespace AC
     {
 
 
-        public void AddToList()
+        public static void AutoMakeBuilding()
         {
+            
+            Methods.ResetTmpBaseMeshes();
+            Methods.ResetTmpMeshTypesList();
+            var allFolder = Methods.ContentFolder(StaticResources.ContentPath);
+            var folderNames = new List<string>();
+            foreach (var folder in allFolder)
+            {
+                if (Methods.VerifyingFolder(folder))
+                {
+                    folderNames.Add(folder);
+                }
+            }
+            foreach (var name in folderNames)
+            {
+             JsonManager.ReadObjSpecJson(name);
+             foreach (var tmpMesh in StaticResources.TmpMeshTypesList)
+             {
+                 var filename = tmpMesh.Filename;
+                 Methods.MeshMaker(filename);
+             }
+             Methods.ResetTmpMeshTypesList();
+             var building = Methods.BuildingMaker();
+             Methods.ResetTmpBaseMeshes();
+             StaticResources.BuildingsList.Add(building);
+             if (!StaticResources.BuildingsNameList.Exists(s=>s.Equals(building.Name)))
+             {
+                 StaticResources.BuildingsNameList.Add(building.Name);
+             }
+            }
+            
         }
 
 

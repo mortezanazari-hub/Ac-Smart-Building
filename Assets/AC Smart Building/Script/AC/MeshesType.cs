@@ -19,15 +19,56 @@ namespace AC
             Position = position;
         }
 
-        public static MeshesType MeshMaker(string name, string type, string variation, Mesh fbx,
-            List<Material> materials, List<Texture2D> textures, bool hasLight, Vector3 localSize, Vector3 position)
-        {
-            var mesh = CreateInstance<MeshesType>();
-            return mesh;
-        }
+        // public static MeshesType MeshMaker(string name, string type, string variation, Mesh fbx,
+        //     List<Material> materials, List<Texture2D> textures, bool hasLight, Vector3 localSize, Vector3 position)
+        // {
+        //     var mesh = CreateInstance<MeshesType>();
+        //     return mesh;
+        // }
 
         public MeshesType()
         {
+        }
+
+        public GameObject GameObjectMaker()
+        {
+            var go = new GameObject();
+            go.name = Name;
+            go.transform.position = Position;
+            go.AddComponent<MeshFilter>().mesh = Fbx;
+            go.AddComponent<MeshRenderer>().material = Materials[0];
+            return go;
+        }
+    }
+
+
+    public class Point3
+    {
+        public double x { get; set; }
+        public double y { get; set; }
+        public double z { get; set; }
+        
+        public Point3(double x, double y, double z)
+        {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+        }
+
+        public static implicit operator Vector3(Point3 point)
+        {
+            var vector3 = new Vector3
+            {
+                x = (float)point.x,
+                y = (float)point.y,
+                z = (float)point.z
+            };
+            return vector3;
+        }
+
+        public override string ToString()
+        {
+            return $"X:{x},Y:{y},Z:{z}";
         }
     }
 
@@ -38,14 +79,19 @@ namespace AC
     {
         public string Filename { get; set; }
         public string MaterialName { get; set; }
-        private bool HasEmissiveMap { get; set; }
-        private Vector3 Size { get; set; }
-        private Vector3 PositionMesh { get; set; }
+        public bool HasEmissiveMap { get; set; }
+        public Point3 Size { get; set; }
+        public Point3 PositionMesh { get; set; }
 
-        public TmpMeshType(string filename, string materialName, bool hasEmissiveMap, Vector3 size,
-            Vector3 positionMesh)
+        public TmpMeshType(string filename, string materialName, bool
+                hasEmissiveMap, Point3 size,
+            Point3 positionMesh)
         {
+            
             Filename = filename;
+            Name = Methods.NameFinder(filename, "name");
+            Type = Methods.NameFinder(filename, "type");
+            Variation = Methods.NameFinder(filename, "var");
             MaterialName = materialName;
             HasEmissiveMap = hasEmissiveMap;
             Size = size;
@@ -57,13 +103,13 @@ namespace AC
             // ReSharper disable once Unity.IncorrectScriptableObjectInstantiation
             var meshesType = new MeshesType
             {
-                Name = Detector.NameFinder(tmpMesh.Filename, "name"),
-                Type = Detector.NameFinder(tmpMesh.Filename, "type"),
-                Variation = Detector.NameFinder(tmpMesh.Filename, "var"),
+                Name = Methods.NameFinder(tmpMesh.Filename, "name"),
+                Type = Methods.NameFinder(tmpMesh.Filename, "type"),
+                Variation = Methods.NameFinder(tmpMesh.Filename, "var"),
                 LocalSize = tmpMesh.Size,
-                Position = tmpMesh.Position,
+                Position = tmpMesh.PositionMesh,
                 HasLight = tmpMesh.HasEmissiveMap,
-                Materials = Detector.MaterialsMatch(Detector.NameFinder(tmpMesh.Filename, "name"), tmpMesh.MaterialName,
+                Materials = Methods.MaterialsMatch(Methods.NameFinder(tmpMesh.Filename, "name"), tmpMesh.MaterialName,
                     tmpMesh.HasEmissiveMap)
             };
             return meshesType;
@@ -177,8 +223,4 @@ namespace AC
     public class Rfm : MeshesType
     {
     } // Roof Floor Middle
-
-
-
-
 }

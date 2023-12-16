@@ -9,7 +9,7 @@ namespace AC
             // ReSharper disable once Unity.IncorrectScriptableObjectInstantiation
             return new TTarget
             {
-                name = mesh.name,
+                Name = mesh.Name,
                 Position = mesh.Position,
                 Fbx = mesh.Fbx,
                 Type = mesh.Type,

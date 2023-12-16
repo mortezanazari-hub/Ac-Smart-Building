@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace AC
 {
-    public class BaseMesh : ScriptableObject
+    public class BaseMesh 
     {
         public string Name { get; set; }
         public string Type { get; set; }
