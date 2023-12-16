@@ -1,0 +1,15 @@
+#title {
+    height: 50px;
+    -unity-text-align: middle-center;
+    background-color: rgba(0, 0, 0, 0.76);
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    color: rgb(255, 255, 255);
+    -unity-font-style: bold;
+    font-size: 23px;
+    -unity-text-outline-color: rgb(0, 0, 0);
+    flex-direction: column;
+    overflow: visible;
+}
