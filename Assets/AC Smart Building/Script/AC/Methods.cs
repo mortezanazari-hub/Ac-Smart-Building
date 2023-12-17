@@ -389,12 +389,16 @@ namespace AC
                 StaticResources.BuildingsList.Add(building);
             }
         }
-
+        //------------------------------------------------------------------------------------------------------------//
+        /// <summary>
+        /// this method make first building
+        /// </summary>
+        /// <param name="building"></param>
         public static void FirstInitialize(Building building)
         {
             var parent = new GameObject(building.Name);
 
-            var properties = new []
+            var properties = new[]
             {
                 building.BackFloorLeft, building.BackFloorMiddle, building.BackFloorRight,
                 building.BackLevelLeft, building.BackLevelMiddle, building.BackLevelRight,
@@ -413,6 +417,11 @@ namespace AC
                 property[0]?.GameObjectMaker(parent);
             }
         }
+        //------------------------------------------------------------------------------------------------------------//
 
+        public static void AddLevel()
+        {
+            
+        }
     }
 }
