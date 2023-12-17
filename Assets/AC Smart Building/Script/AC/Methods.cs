@@ -392,104 +392,27 @@ namespace AC
 
         public static void FirstInitialize(Building building)
         {
-            GameObject parent = new GameObject(building.Name); // The first GameObject that will act as a parent
-            string[] gameObjectNames =
+            var parent = new GameObject(building.Name);
+
+            var properties = new []
             {
-                "bfl", "bfm", "bfr", "bll", "blm", "blr", "fl", "fm", "fr", "fsl", "fsr", "ll", "lm", "lr", "lsl",
-                "lsr", "rbl", "rbm", "rbr", "rl", "rm", "rr", "rsl", "rsr", "rfr", "rfl", "rfm"
+                building.BackFloorLeft, building.BackFloorMiddle, building.BackFloorRight,
+                building.BackLevelLeft, building.BackLevelMiddle, building.BackLevelRight,
+                building.FloorLeft, building.FloorMiddle, building.FloorRight,
+                building.FloorSideLeft, building.FloorSideRight,
+                building.LevelLeft, building.LevelMiddle, building.LevelRight,
+                building.LevelSideLeft, building.LevelSideRight,
+                building.RoofBackLeft, building.RoofBackMiddle, building.RoofBackRight,
+                building.RoofLeft, building.RoofMiddle, building.RoofRight,
+                building.RoofSideLeft, building.RoofSideRight,
+                building.RoofFloorRight, building.RoofFloorLeft, building.RoofFloorMiddle
             };
 
-            // Retrieve all the properties of the building just once to improve efficiency
-            var properties = building.GetType().GetProperties();
-
-            // Iterate over all the names
-            foreach (var type in gameObjectNames)
+            foreach (var property in properties)
             {
-                switch (type)
-                {
-                    case "bfl":
-                        building.BackFloorLeft[0].GameObjectMaker(parent);
-                        break;
-                    case "bfm":
-                        building.BackFloorMiddle[0].GameObjectMaker(parent);
-                        break;
-                    case "bfr":
-                        building.BackFloorRight[0].GameObjectMaker(parent);
-                        break;
-                    case "bll":
-                        building.BackLevelLeft[0].GameObjectMaker(parent);
-                        break;
-                    case "blm":
-                        building.BackLevelMiddle[0].GameObjectMaker(parent);
-                        break;
-                    case "blr":
-                        building.BackLevelRight[0].GameObjectMaker(parent);
-                        break;
-                    case "fl":
-                        building.FloorLeft[0].GameObjectMaker(parent);
-                        break;
-                    case "fm":
-                        building.FloorMiddle[0].GameObjectMaker(parent);
-                        break;
-                    case "fr":
-                        building.FloorRight[0].GameObjectMaker(parent);
-                        break;
-                    case "fsl":
-                        building.FloorSideLeft[0].GameObjectMaker(parent);
-                        break;
-                    case "fsr":
-                        building.FloorSideRight[0].GameObjectMaker(parent);
-                        break;
-                    case "ll":
-                        building.LevelLeft[0].GameObjectMaker(parent);
-                        break;
-                    case "lm":
-                        building.LevelMiddle[0].GameObjectMaker(parent);
-                        break;
-                    case "lr":
-                        building.LevelRight[0].GameObjectMaker(parent);
-                        break;
-                    case "lsl":
-                        building.LevelSideLeft[0].GameObjectMaker(parent);
-                        break;
-                    case "lsr":
-                        building.LevelSideRight[0].GameObjectMaker(parent);
-                        break;
-                    case "rbl":
-                        building.RoofBackLeft[0].GameObjectMaker(parent);
-                        break;
-                    case "rbm":
-                        building.RoofBackMiddle[0].GameObjectMaker(parent);
-                        break;
-                    case "rbr":
-                        building.RoofBackRight[0].GameObjectMaker(parent);
-                        break;
-                    case "rl":
-                        building.RoofLeft[0].GameObjectMaker(parent);
-                        break;
-                    case "rm":
-                        building.RoofMiddle[0].GameObjectMaker(parent);
-                        break;
-                    case "rr":
-                        building.RoofRight[0].GameObjectMaker(parent);
-                        break;
-                    case "rsl":
-                        building.RoofSideLeft[0].GameObjectMaker(parent);
-                        break;
-                    case "rsr":
-                        building.RoofSideRight[0].GameObjectMaker(parent);
-                        break;
-                    case "rfr":
-                        building.RoofFloorRight[0].GameObjectMaker(parent);
-                        break;
-                    case "rfl":
-                        building.RoofFloorLeft[0].GameObjectMaker(parent);
-                        break;
-                    case "rfm":
-                        building.RoofFloorMiddle[0].GameObjectMaker(parent);
-                        break;
-                }
+                property[0]?.GameObjectMaker(parent);
             }
         }
+
     }
 }
