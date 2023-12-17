@@ -389,6 +389,7 @@ namespace AC
                 StaticResources.BuildingsList.Add(building);
             }
         }
+
         //------------------------------------------------------------------------------------------------------------//
         /// <summary>
         /// this method make first building
@@ -419,9 +420,46 @@ namespace AC
         }
         //------------------------------------------------------------------------------------------------------------//
 
-        public static void AddLevel()
+        public static void AddLevel(GameObject parent)
         {
-            
+            var childList = new List<GameObject>();
+            if (parent.transform.childCount <= 0) return;
+            for (int i = 0; i < parent.transform.childCount; i++)
+            {
+                childList.Add(parent.transform.GetChild(i).gameObject);
+            }
+        }
+
+        private static List<GameObject> RoofGameObjects(List<GameObject> allChild)
+        {
+            //the list of name of all Roof part
+            string[] roofParts = { "rfm", "rfl", "rfr", "rsr", "rsl", "rl", "rm", "rr", "rbr", "rbm", "rbl" };
+            return allChild.FindAll(go =>
+                roofParts.Any(part => go.name.ToLower().Contains(part)));
+        }
+
+        private static List<GameObject> LevelGameObjects(List<GameObject> allChild)
+        {
+            //the list of name of all Level part
+            string[] roofParts = { "bll", "blm", "blr", "ll", "lm", "lr", "lsl", "lsr" };
+            return allChild.FindAll(go =>
+                roofParts.Any(part => go.name.ToLower().Contains(part)));
+        }
+
+        private static List<GameObject> LeftGameObjects(List<GameObject> allChild)
+        {
+            //the list of name of all Left part
+            string[] roofParts = { "bfl", "bll", "fl", "fsl", "lsl", "rbl", "rl", "rsl", "rfl" };
+            return allChild.FindAll(go =>
+                roofParts.Any(part => go.name.ToLower().Contains(part)));
+        }
+
+        private static List<GameObject> MiddleGameObjects(List<GameObject> allChild)
+        {
+            //the list of name of all Middle part
+            string[] roofParts = { "bfm", "blm", "fm", "lm", "rbm", "rm", "rfm" };
+            return allChild.FindAll(go =>
+                roofParts.Any(part => go.name.ToLower().Contains(part)));
         }
     }
 }
