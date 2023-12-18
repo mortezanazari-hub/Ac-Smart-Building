@@ -418,7 +418,9 @@ namespace AC
                 property[0]?.GameObjectMaker(parent);
             }
         }
+
         //------------------------------------------------------------------------------------------------------------//
+        private static List<GameObject> firstLevelGameObjects = null;
 
         public static void AddLevel(GameObject parent)
         {
@@ -427,6 +429,22 @@ namespace AC
             for (int i = 0; i < parent.transform.childCount; i++)
             {
                 childList.Add(parent.transform.GetChild(i).gameObject);
+            }
+
+            var roofGameObjects = RoofGameObjects(childList);
+            var levelGameObjects = LevelGameObjects(childList);
+            if (firstLevelGameObjects != null)
+            {
+                firstLevelGameObjects = levelGameObjects;
+            }
+
+            var levelHeight = levelGameObjects[0].GetComponent<ObjectDetail>().LocalSize.y;
+            Debug.Log(levelHeight);
+            foreach (var roof in roofGameObjects)
+            {
+                var transformPosition = roof.transform.position;
+                transformPosition.y += levelHeight;
+                roof.transform.position = transformPosition;
             }
         }
 

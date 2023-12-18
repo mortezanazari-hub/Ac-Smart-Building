@@ -64,5 +64,10 @@ namespace AC
             Automation.AutoMakeBuilding();
             Methods.FirstInitialize(StaticResources.BuildingsList[0]);
         }
+        [MenuItem("Tools/Test Add Level")]
+        private static void AddLeveler()
+        {
+            Methods.AddLevel(GameObject.Find("Test01"));
+        }
     }
 }

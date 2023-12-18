@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace AC
@@ -33,25 +34,35 @@ namespace AC
             go.transform.position = Position;
             go.AddComponent<MeshFilter>().mesh = Fbx;
             var meshRender = go.AddComponent<MeshRenderer>();
-            
+
             if (HasLight)
             {
-                var matOff= Materials.Find(m =>m.name.Contains("LightOff"));
-                Methods.TextureMatchToMaterial(matOff.name,Textures,matOff);
-                
-               var matOn= Materials.Find(m =>m.name.Contains("LightOn"));
-               meshRender.material = matOn;
-               Methods.TextureMatchToMaterial(matOn.name,Textures,matOn); 
+                var matOff = Materials.Find(m => m.name.Contains("LightOff"));
+                Methods.TextureMatchToMaterial(matOff.name, Textures, matOff);
 
-
+                var matOn = Materials.Find(m => m.name.Contains("LightOn"));
+                meshRender.material = matOn;
+                Methods.TextureMatchToMaterial(matOn.name, Textures, matOn);
             }
             else
             {
-                var matOff= Materials.Find(m =>m.name.Contains("LightOff"));
+                var matOff = Materials.Find(m => m.name.Contains("LightOff"));
                 meshRender.material = matOff;
-                Methods.TextureMatchToMaterial(matOff.name,Textures,matOff);
+                Methods.TextureMatchToMaterial(matOff.name, Textures, matOff);
             }
-            
+
+            var meshDetail = go.AddComponent<ObjectDetail>();
+            meshDetail.Name = Name;
+            meshDetail.Type = Type;
+            meshDetail.Variation = Variation;
+            meshDetail.LocalSize = LocalSize;
+            meshDetail.Position = Position;
+            meshDetail.HasLight = HasLight;
+            meshDetail.Textures = Textures;
+            meshDetail.Fbx = Fbx;
+            meshDetail.Materials = Materials;
+
+
             return go;
         }
     }
