@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace AC
 {
@@ -419,32 +420,61 @@ namespace AC
             }
         }
 
+
         //------------------------------------------------------------------------------------------------------------//
+        //This list is filled only after the first time, and it puts the initial game objects of the floors inside itself
+        //It must be empty for the next buildings
         private static List<GameObject> firstLevelGameObjects = null;
 
         public static void AddLevel(GameObject parent)
         {
+            // This list is a collection of all the game objects of a building
             var childList = new List<GameObject>();
+            //Here we say return if the given object has no children
             if (parent.transform.childCount <= 0) return;
+            // Here we say put all the game objects in the sub-set into the childList
             for (int i = 0; i < parent.transform.childCount; i++)
             {
                 childList.Add(parent.transform.GetChild(i).gameObject);
             }
 
+            //We put all the game objects related to the ceiling in this list            
             var roofGameObjects = RoofGameObjects(childList);
+            //We put all the game objects related to the classes in this list
             var levelGameObjects = LevelGameObjects(childList);
-            if (firstLevelGameObjects != null)
+            //If firstLevelGameObjects was equal to null, then we put all the list of classes inside it.
+            // This means that it only works the first time the building is created.
+            if (firstLevelGameObjects == null)
             {
                 firstLevelGameObjects = levelGameObjects;
             }
 
+            // This variable enters the list of game objects of the floors and takes the height of the floors from the zeroth house.            
             var levelHeight = levelGameObjects[0].GetComponent<ObjectDetail>().LocalSize.y;
-            Debug.Log(levelHeight);
+            //Here, we raise all the game objects of the ceiling to the height of one tier
             foreach (var roof in roofGameObjects)
             {
                 var transformPosition = roof.transform.position;
                 transformPosition.y += levelHeight;
                 roof.transform.position = transformPosition;
+            }
+
+            //The position of the last floor is equal to the position of the roof minus the height of one floor
+            var endLevelPositionY = roofGameObjects[0].transform.position.y -
+                                    levelGameObjects[0].GetComponent<ObjectDetail>().LocalSize.y;
+            //If the members in the firstLevelGameObjects list are not null
+
+            if (firstLevelGameObjects == null) return;
+            //Instantiate all members of the firstLevelGameObjects list
+            foreach (var item in firstLevelGameObjects)
+            {
+                // The desired position for the Instantiate is calculated here. Because only the Y axis changes.
+                // Therefore, the rest are fixed
+                var itemPosition = item.transform.position;
+                itemPosition.y = endLevelPositionY;
+                // Instantiate is done here.
+                var gameObject = Object.Instantiate(item, itemPosition, Quaternion.identity);
+                gameObject.transform.parent = parent.transform;
             }
         }
 
