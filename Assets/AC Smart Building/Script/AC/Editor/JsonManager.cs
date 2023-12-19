@@ -21,7 +21,6 @@ namespace AC
                 //  Methods.Meshes = JsonConvert.DeserializeObject<List<Building>>(str);
             }
         }
-
         public static void ReadObjSpecJson(string name)
         {
             using (var streamReader = new StreamReader($"{StaticResources.FbxPath(name)}Obj_Spec.json"))
@@ -30,13 +29,5 @@ namespace AC
                 StaticResources.TmpMeshesType = JsonConvert.DeserializeObject<List<MeshesType>>(str);
             }
         }
-        
-        
-        
-        
-        
-
-
-        
     }
 }

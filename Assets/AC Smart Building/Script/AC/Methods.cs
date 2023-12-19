@@ -14,6 +14,8 @@ namespace AC
 {
     public abstract class Methods
     {
+        #region Material Names List
+
         private static List<string> _materialNamesList = new List<string>();
 
         /// <summary>
@@ -33,6 +35,10 @@ namespace AC
             return justName;
         }
 
+        #endregion
+
+        #region Verifying Folder
+
         //------------------------------------------------------------------------------------------------------------//
         /// <summary>
         /// this methode check Texture and FBX folders and verify them
@@ -50,6 +56,10 @@ namespace AC
 
             return false;
         }
+
+        #endregion
+
+        #region Texture Verifying
 
         //------------------------------------------------------------------------------------------------------------//
         /// <summary>
@@ -73,6 +83,10 @@ namespace AC
 
             return false;
         }
+
+        #endregion
+
+        #region Fbx Verifying
 
         //------------------------------------------------------------------------------------------------------------//
         /// <summary>
@@ -106,6 +120,10 @@ namespace AC
             return false;
         }
 
+        #endregion
+
+        #region Name Finder
+
         //------------------------------------------------------------------------------------------------------------//
         /// <summary>
         /// This method find the main name of building
@@ -128,6 +146,10 @@ namespace AC
             };
         }
 
+        #endregion
+
+        #region Fbx Finder
+
         //------------------------------------------------------------------------------------------------------------//
         /// <summary>
         /// This method match fbx file to mesh
@@ -140,6 +162,10 @@ namespace AC
             return (Mesh)AssetDatabase.LoadAssetAtPath(fbxFolder + fileName + ".fbx", typeof(Mesh));
         }
 
+        #endregion
+
+        #region Textures Match
+
         //------------------------------------------------------------------------------------------------------------//
         /// <summary>
         /// This method can find textures in texture folder and match to materials
@@ -147,13 +173,6 @@ namespace AC
         /// <param name="materialName">the material name</param>
         /// <param name="textureFolder">the texture folder</param>
         /// <returns></returns>
-        // public static List<Texture2D> TexturesMatch(string materialName, string textureFolder)
-        // {
-        //     return Directory.GetFiles(textureFolder)
-        //         .Where(t => t.Contains(materialName))
-        //         .Select(t => AssetDatabase.LoadAssetAtPath<Texture2D>(textureFolder + t))
-        //         .ToList();
-        // }
         public static List<Texture2D> TexturesMatch(string materialName, string textureFolder)
         {
             var textures = new List<Texture2D>();
@@ -167,6 +186,10 @@ namespace AC
 
             return textures;
         }
+
+        #endregion
+
+        #region Materials Match
 
         //------------------------------------------------------------------------------------------------------------//
         /// <summary>
@@ -221,6 +244,9 @@ namespace AC
             return materialsOfMesh;
         }
 
+        #endregion
+
+        #region Texture Match To Material
 
         //------------------------------------------------------------------------------------------------------------//
 
@@ -264,6 +290,9 @@ namespace AC
             }
         }
 
+        #endregion
+
+        #region Building Maker
 
         //------------------------------------------------------------------------------------------------------------//
 
@@ -369,6 +398,10 @@ namespace AC
             return building;
         }
 
+        #endregion
+
+        #region Reset Tmp Base Meshes
+
         //------------------------------------------------------------------------------------------------------------//
         /// <summary>
         /// this methode rest the TmpBaseMeshes list
@@ -377,6 +410,10 @@ namespace AC
         {
             StaticResources.TmpMeshesType.Clear();
         }
+
+        #endregion
+
+        #region Add To Buildings List
 
         //------------------------------------------------------------------------------------------------------------//
         /// <summary>
@@ -390,6 +427,10 @@ namespace AC
                 StaticResources.BuildingsList.Add(building);
             }
         }
+
+        #endregion
+
+        #region First Initialize
 
         //------------------------------------------------------------------------------------------------------------//
         /// <summary>
@@ -420,12 +461,19 @@ namespace AC
             }
         }
 
+        #endregion
+
+        #region Add Level
 
         //------------------------------------------------------------------------------------------------------------//
         //This list is filled only after the first time, and it puts the initial game objects of the floors inside itself
         //It must be empty for the next buildings
         private static List<GameObject> firstLevelGameObjects = null;
 
+        /// <summary>
+        /// this method add level to building
+        /// </summary>
+        /// <param name="parent"></param>
         public static void AddLevel(GameObject parent)
         {
             // This list is a collection of all the game objects of a building
@@ -478,6 +526,87 @@ namespace AC
             }
         }
 
+        #endregion   
+        #region Add side
+
+        //------------------------------------------------------------------------------------------------------------//
+        //This list is filled only after the first time, and it puts the initial game objects of the floors inside itself
+        //It must be empty for the next buildings
+        private static List<GameObject> firstSideGameObjects = null;
+
+        /// <summary>
+        /// this method add level to building
+        /// </summary>
+        /// <param name="parent"></param>
+        public static void AddSide(GameObject parent)
+        {
+            // This list is a collection of all the game objects of a building
+            var childList = new List<GameObject>();
+            //Here we say return if the given object has no children
+            if (parent.transform.childCount <= 0) return;
+            // Here we say put all the game objects in the sub-set into the childList
+            for (int i = 0; i < parent.transform.childCount; i++)
+            {
+                childList.Add(parent.transform.GetChild(i).gameObject);
+            }
+
+            //We put all the game objects related to the ceiling in this list            
+            var roofGameObjects = RoofGameObjects(childList);
+            //We put all the game objects related to the classes in this list
+            var levelGameObjects = LevelGameObjects(childList);
+            //If firstLevelGameObjects was equal to null, then we put all the list of classes inside it.
+            // This means that it only works the first time the building is created.
+            if (firstLevelGameObjects == null)
+            {
+                firstLevelGameObjects = levelGameObjects;
+            }
+
+            // This variable enters the list of game objects of the floors and takes the height of the floors from the zeroth house.            
+            var levelHeight = levelGameObjects[0].GetComponent<ObjectDetail>().LocalSize.y;
+            //Here, we raise all the game objects of the ceiling to the height of one tier
+            foreach (var roof in roofGameObjects)
+            {
+                var transformPosition = roof.transform.position;
+                transformPosition.y += levelHeight;
+                roof.transform.position = transformPosition;
+            }
+
+            //The position of the last floor is equal to the position of the roof minus the height of one floor
+            var endLevelPositionY = roofGameObjects[0].transform.position.y -
+                                    levelGameObjects[0].GetComponent<ObjectDetail>().LocalSize.y;
+            //If the members in the firstLevelGameObjects list are not null
+
+            if (firstLevelGameObjects == null) return;
+            //Instantiate all members of the firstLevelGameObjects list
+            foreach (var item in firstLevelGameObjects)
+            {
+                // The desired position for the Instantiate is calculated here. Because only the Y axis changes.
+                // Therefore, the rest are fixed
+                var itemPosition = item.transform.position;
+                itemPosition.y = endLevelPositionY;
+                // Instantiate is done here.
+                var gameObject = Object.Instantiate(item, itemPosition, Quaternion.identity);
+                gameObject.transform.parent = parent.transform;
+            }
+        }
+
+        #endregion
+        
+
+        #region Side Game Objects
+
+        private static List<GameObject> SideGameObjects(List<GameObject> allChild)
+        {
+            //the list of name of all Roof part
+            string[] roofParts = { "fsl", "fsr", "lsl", "lsr", "rsl", "rsr" };
+            return allChild.FindAll(go =>
+                roofParts.Any(part => go.name.ToLower().Contains(part)));
+        }
+
+        #endregion
+
+        #region Roof Game Objects
+
         private static List<GameObject> RoofGameObjects(List<GameObject> allChild)
         {
             //the list of name of all Roof part
@@ -485,6 +614,10 @@ namespace AC
             return allChild.FindAll(go =>
                 roofParts.Any(part => go.name.ToLower().Contains(part)));
         }
+
+        #endregion
+
+        #region Level Game Objects
 
         private static List<GameObject> LevelGameObjects(List<GameObject> allChild)
         {
@@ -494,6 +627,10 @@ namespace AC
                 roofParts.Any(part => go.name.ToLower().Contains(part)));
         }
 
+        #endregion
+
+        #region Left Game Objects
+
         private static List<GameObject> LeftGameObjects(List<GameObject> allChild)
         {
             //the list of name of all Left part
@@ -502,6 +639,10 @@ namespace AC
                 roofParts.Any(part => go.name.ToLower().Contains(part)));
         }
 
+        #endregion
+
+        #region Middle Game Objects
+
         private static List<GameObject> MiddleGameObjects(List<GameObject> allChild)
         {
             //the list of name of all Middle part
@@ -509,5 +650,7 @@ namespace AC
             return allChild.FindAll(go =>
                 roofParts.Any(part => go.name.ToLower().Contains(part)));
         }
+
+        #endregion
     }
 }
