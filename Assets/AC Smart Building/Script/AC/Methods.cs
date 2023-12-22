@@ -440,10 +440,6 @@ namespace AC
         public static void FirstInitialize(Building building)
         {
             var parent = new GameObject(building.Name);
-            var hiddenObjects = new GameObject("hiddenObjects");
-            hiddenObjects.transform.parent = parent.transform;
-            hiddenObjects.SetActive(false);
-
             var properties = new[]
             {
                 building.BackFloorLeft, building.BackFloorMiddle, building.BackFloorRight,
@@ -652,43 +648,102 @@ namespace AC
 
             var roofObjects = RoofGameObjects(childList);
             var endLevelGameObjects = EndLevelGameObjects(childList);
-            foreach (var gameObject in endLevelGameObjects)
-            {
-                if (gameObject.transform.parent == gameObject.transform.Find("hiddenObjects"))
-                {
-                    var index = endLevelGameObjects.IndexOf(gameObject);
-                    endLevelGameObjects.RemoveAt(index);
-                }
-            }
-
             var levelHeight = endLevelGameObjects[0].GetComponent<ObjectDetail>().LocalSize.y;
-            foreach (var roof in roofObjects)
-            {
-                var transformPosition = roof.transform.position;
-                transformPosition.y -= levelHeight;
-                roof.transform.position = transformPosition;
-            }
+            var levelCount = childList.FindAll(T => T.name.Contains("LR"))
+                .FindAll(T => T.GetComponent<ObjectDetail>().Type == "LR").Count;
 
-
-            //var levelCount = childList.FindAll(l => l.GetComponent<ObjectDetail>().Type == "LR").Count;
-            var levelCount = childList.FindAll(T=>T.name.Contains("LR")).FindAll(T => T.GetComponent<ObjectDetail>().Type=="LR").Count;
-            Debug.Log(levelCount);
-            
             if (levelCount > 1)
             {
+                foreach (var roof in roofObjects)
+                {
+                    var transformPosition = roof.transform.position;
+                    transformPosition.y -= levelHeight;
+                    roof.transform.position = transformPosition;
+                }
+
                 foreach (var levelGameObject in endLevelGameObjects)
                 {
                     Object.DestroyImmediate(levelGameObject);
                 }
             }
-            else if (levelCount == 1)
+            else
             {
-                var hiddenObjects = parent.transform.Find("hiddenObjects").gameObject;
-            
-                foreach (var item in endLevelGameObjects)
+                return;
+            }
+        }
+
+        #endregion
+
+        #region Reduce side
+
+        public static void SideReducer(GameObject parent)
+        {
+            var childList = new List<GameObject>();
+            //Here we say return if the given object has no children
+            if (parent.transform.childCount <= 0) return;
+            // Here we say put all the game objects in the sub-set into the childList
+            for (int i = 0; i < parent.transform.childCount; i++)
+            {
+                childList.Add(parent.transform.GetChild(i).gameObject);
+            }
+
+            var backGameObjects = BackGameObjects(childList);
+            var endSideGameObjects = EndSideGameObjects(childList);
+            var sideWidth = endSideGameObjects[0].GetComponent<ObjectDetail>().LocalSize.z;
+            var sideCount = childList.FindAll(T => T.name.ToLower().Contains("fsr"))
+                .FindAll(T => T.GetComponent<ObjectDetail>().Type.ToLower() == "fsr").Count;
+            if (sideCount > 1)
+            {
+                foreach (var roof in backGameObjects)
                 {
-                    item.transform.parent = hiddenObjects.transform;
-                    // item.SetActive(false);
+                    var transformPosition = roof.transform.position;
+                    transformPosition.z += sideWidth;
+                    roof.transform.position = transformPosition;
+                }
+
+                foreach (var levelGameObject in endSideGameObjects)
+                {
+                    Object.DestroyImmediate(levelGameObject);
+                }
+            }
+            else
+            {
+                return;
+            }
+        }
+
+        #endregion
+
+        #region Reduce Middle
+
+        public static void MiddleReducer(GameObject parent)
+        {
+            var childList = new List<GameObject>();
+            //Here we say return if the given object has no children
+            if (parent.transform.childCount <= 0) return;
+            // Here we say put all the game objects in the sub-set into the childList
+            for (int i = 0; i < parent.transform.childCount; i++)
+            {
+                childList.Add(parent.transform.GetChild(i).gameObject);
+            }
+
+            var leftGameObjects = LeftGameObjects(childList);
+            var endMiddleGameObjects = EndMiddleGameObjects(childList);
+            var middleWidth = endMiddleGameObjects[0].GetComponent<ObjectDetail>().LocalSize.x;
+            var count = childList.FindAll(T => T.name.ToLower().Contains("fm"))
+                .FindAll(T => T.GetComponent<ObjectDetail>().Type.ToLower() == "fm").Count;
+            if (count > 1)
+            {
+                foreach (var leftObject in leftGameObjects)
+                {
+                    var transformPosition = leftObject.transform.position;
+                    transformPosition.x -= middleWidth;
+                    leftObject.transform.position = transformPosition;
+                }
+
+                foreach (var levelGameObject in endMiddleGameObjects)
+                {
+                    Object.DestroyImmediate(levelGameObject);
                 }
             }
             else
@@ -739,6 +794,39 @@ namespace AC
 
         #endregion
 
+        #region End Side Game Objects
+
+        private static List<GameObject> EndSideGameObjects(List<GameObject> allChild)
+        {
+            //the list of name of all Level part
+            string[] parts = { "rsl", "rsr", "fsl", "fsr", "lsl", "lsr", "rfl", "rfm", "rfr" };
+            var backPositionZ = allChild.Find(o => o.name.ToLower().Contains("bfr")).transform.position.z +
+                                allChild.Find(o => o.name.ToLower().Contains("fsr")).GetComponent<ObjectDetail>()
+                                    .LocalSize.z;
+            return allChild.FindAll(go =>
+                    parts.Any(part => go.name.ToLower().Contains(part)))
+                .FindAll(d => Math.Abs(d.transform.position.z - backPositionZ) < 0.1f);
+        }
+
+        #endregion
+
+        #region End Middle Game Objects
+
+        private static List<GameObject> EndMiddleGameObjects(List<GameObject> allChild)
+        {
+            //the list of name of all Level part
+            string[] parts = {  "bfm", "blm", "fm", "lm", "rbm", "rm", "rfm" };
+            var leftPositionX = allChild.Find(o => o.name.ToLower().Contains("fsl")).transform.position.x -
+                                allChild.Find(o => o.name.ToLower().Contains("fl")).GetComponent<ObjectDetail>()
+                                    .LocalSize.x - allChild.Find(o => o.name.ToLower().Contains("fm")).GetComponent<ObjectDetail>()
+                                    .LocalSize.x;
+            return allChild.FindAll(go =>
+                    parts.Any(part => go.name.ToLower().Contains(part)))
+                .FindAll(d => Math.Abs(d.transform.position.x - leftPositionX) < 0.1f);
+        }
+
+        #endregion
+
         #region Level Game Objects
 
         private static List<GameObject> LevelGameObjects(List<GameObject> allChild)
@@ -748,7 +836,6 @@ namespace AC
 
             var floorHeightSize = allChild.Find(o => o.name.ToLower().Contains("fsr"))
                 .GetComponent<ObjectDetail>().LocalSize.y;
-            Debug.Log(floorHeightSize);
             return allChild.FindAll(go => levelPart.Any(part => go.name.ToLower().Contains(part)))
                 .FindAll(d => Math.Abs(d.transform.position.y - floorHeightSize) < 0.1f);
         }

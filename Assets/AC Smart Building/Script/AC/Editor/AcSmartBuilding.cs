@@ -84,5 +84,15 @@ namespace AC
         {
             Methods.LevelReducer(GameObject.Find("Test01"));
         }
+        [MenuItem("Tools/Test Side Reducer")]
+        private static void SideReducer()
+        {
+            Methods.SideReducer(GameObject.Find("Test01"));
+        }
+        [MenuItem("Tools/Test Middle Reducer")]
+        private static void MiddleReducer()
+        {
+            Methods.MiddleReducer(GameObject.Find("Test01"));
+        }
     }
 }
