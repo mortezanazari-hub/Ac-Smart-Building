@@ -462,8 +462,8 @@ namespace AC
                 
             }
             // Focus on the created object in Scene view
-            Selection.activeGameObject = parent;
-            SceneView.FrameLastActiveSceneView();
+            // Selection.activeGameObject = parent;
+            // SceneView.FrameLastActiveSceneView();
         }
 
         #endregion

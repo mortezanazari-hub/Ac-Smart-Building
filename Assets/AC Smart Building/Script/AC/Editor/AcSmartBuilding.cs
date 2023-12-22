@@ -82,7 +82,7 @@ namespace AC
                 Vector3 mousePos = e.mousePosition;
                 // Note that the y coordinate is flipped in GUI coordinates
                 mousePos.y = sceneView.camera.pixelHeight - mousePos.y;
-                Vector3 worldPos = sceneView.camera.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, 100f)); // 10f is an arbitrary distance from the camera
+                Vector3 worldPos = sceneView.camera.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, 1f)); // 10f is an arbitrary distance from the camera
 
                 // Call Maker with the determined position
                 Methods.FirstInitialize(StaticResources.BuildingsList[0],worldPos);
