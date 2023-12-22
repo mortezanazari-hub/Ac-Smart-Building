@@ -58,7 +58,7 @@ namespace AC
         {
             return _typeSelected = str;
         }
-        [MenuItem("Tools/Test")]
+        [MenuItem("Tools/Test First Initialize")]
         private static void ActionSomething()
         {
             Automation.AutoMakeBuilding();
@@ -68,6 +68,21 @@ namespace AC
         private static void AddLeveler()
         {
             Methods.AddLevel(GameObject.Find("Test01"));
+        }   
+        [MenuItem("Tools/Test Add Side")]
+        private static void AddSide()
+        {
+            Methods.AddSide(GameObject.Find("Test01"));
+        } 
+        [MenuItem("Tools/Test Add Middle")]
+        private static void AddMiddle()
+        {
+            Methods.AddMiddle(GameObject.Find("Test01"));
+        }  
+        [MenuItem("Tools/Test Level Reducer")]
+        private static void LevelReducer()
+        {
+            Methods.LevelReducer(GameObject.Find("Test01"));
         }
     }
 }

@@ -65,5 +65,44 @@ namespace AC
 
             return go;
         }
+        public GameObject GameObjectMaker(GameObject parent,Vector3 position)
+        {
+            var go = new GameObject();
+            go.transform.parent = parent.transform;
+            go.name = $"{Name}_{Variation}_{Type}";
+            go.transform.position = position;
+            go.AddComponent<MeshFilter>().mesh = Fbx;
+            var meshRender = go.AddComponent<MeshRenderer>();
+
+            if (HasLight)
+            {
+                var matOff = Materials.Find(m => m.name.Contains("LightOff"));
+                Methods.TextureMatchToMaterial(matOff.name, Textures, matOff);
+
+                var matOn = Materials.Find(m => m.name.Contains("LightOn"));
+                meshRender.material = matOn;
+                Methods.TextureMatchToMaterial(matOn.name, Textures, matOn);
+            }
+            else
+            {
+                var matOff = Materials.Find(m => m.name.Contains("LightOff"));
+                meshRender.material = matOff;
+                Methods.TextureMatchToMaterial(matOff.name, Textures, matOff);
+            }
+            
+            var meshDetail = go.AddComponent<ObjectDetail>();
+            meshDetail.Name = Name;
+            meshDetail.Type = Type;
+            meshDetail.Variation = Variation;
+            meshDetail.LocalSize = LocalSize;
+            meshDetail.Position = Position;
+            meshDetail.HasLight = HasLight;
+            meshDetail.Textures = Textures;
+            meshDetail.Fbx = Fbx;
+            meshDetail.Materials = Materials;
+
+
+            return go;
+        }
     }
 }

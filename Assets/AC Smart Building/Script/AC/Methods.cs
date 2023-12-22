@@ -440,6 +440,9 @@ namespace AC
         public static void FirstInitialize(Building building)
         {
             var parent = new GameObject(building.Name);
+            var hiddenObjects = new GameObject("hiddenObjects");
+            hiddenObjects.transform.parent = parent.transform;
+            hiddenObjects.SetActive(false);
 
             var properties = new[]
             {
@@ -466,10 +469,6 @@ namespace AC
         #region Add Level
 
         //------------------------------------------------------------------------------------------------------------//
-        //This list is filled only after the first time, and it puts the initial game objects of the floors inside itself
-        //It must be empty for the next buildings
-        private static List<GameObject> firstLevelGameObjects = null;
-
         /// <summary>
         /// this method add level to building
         /// </summary>
@@ -488,14 +487,10 @@ namespace AC
 
             //We put all the game objects related to the ceiling in this list            
             var roofGameObjects = RoofGameObjects(childList);
+
             //We put all the game objects related to the classes in this list
             var levelGameObjects = LevelGameObjects(childList);
-            //If firstLevelGameObjects was equal to null, then we put all the list of classes inside it.
-            // This means that it only works the first time the building is created.
-            if (firstLevelGameObjects == null)
-            {
-                firstLevelGameObjects = levelGameObjects;
-            }
+
 
             // This variable enters the list of game objects of the floors and takes the height of the floors from the zeroth house.            
             var levelHeight = levelGameObjects[0].GetComponent<ObjectDetail>().LocalSize.y;
@@ -512,73 +507,9 @@ namespace AC
                                     levelGameObjects[0].GetComponent<ObjectDetail>().LocalSize.y;
             //If the members in the firstLevelGameObjects list are not null
 
-            if (firstLevelGameObjects == null) return;
+            if (levelGameObjects == null) return;
             //Instantiate all members of the firstLevelGameObjects list
-            foreach (var item in firstLevelGameObjects)
-            {
-                // The desired position for the Instantiate is calculated here. Because only the Y axis changes.
-                // Therefore, the rest are fixed
-                var itemPosition = item.transform.position;
-                itemPosition.y = endLevelPositionY;
-                // Instantiate is done here.
-                var gameObject = Object.Instantiate(item, itemPosition, Quaternion.identity);
-                gameObject.transform.parent = parent.transform;
-            }
-        }
-
-        #endregion   
-        #region Add side
-
-        //------------------------------------------------------------------------------------------------------------//
-        //This list is filled only after the first time, and it puts the initial game objects of the floors inside itself
-        //It must be empty for the next buildings
-        private static List<GameObject> firstSideGameObjects = null;
-
-        /// <summary>
-        /// this method add level to building
-        /// </summary>
-        /// <param name="parent"></param>
-        public static void AddSide(GameObject parent)
-        {
-            // This list is a collection of all the game objects of a building
-            var childList = new List<GameObject>();
-            //Here we say return if the given object has no children
-            if (parent.transform.childCount <= 0) return;
-            // Here we say put all the game objects in the sub-set into the childList
-            for (int i = 0; i < parent.transform.childCount; i++)
-            {
-                childList.Add(parent.transform.GetChild(i).gameObject);
-            }
-
-            //We put all the game objects related to the ceiling in this list            
-            var roofGameObjects = RoofGameObjects(childList);
-            //We put all the game objects related to the classes in this list
-            var levelGameObjects = LevelGameObjects(childList);
-            //If firstLevelGameObjects was equal to null, then we put all the list of classes inside it.
-            // This means that it only works the first time the building is created.
-            if (firstLevelGameObjects == null)
-            {
-                firstLevelGameObjects = levelGameObjects;
-            }
-
-            // This variable enters the list of game objects of the floors and takes the height of the floors from the zeroth house.            
-            var levelHeight = levelGameObjects[0].GetComponent<ObjectDetail>().LocalSize.y;
-            //Here, we raise all the game objects of the ceiling to the height of one tier
-            foreach (var roof in roofGameObjects)
-            {
-                var transformPosition = roof.transform.position;
-                transformPosition.y += levelHeight;
-                roof.transform.position = transformPosition;
-            }
-
-            //The position of the last floor is equal to the position of the roof minus the height of one floor
-            var endLevelPositionY = roofGameObjects[0].transform.position.y -
-                                    levelGameObjects[0].GetComponent<ObjectDetail>().LocalSize.y;
-            //If the members in the firstLevelGameObjects list are not null
-
-            if (firstLevelGameObjects == null) return;
-            //Instantiate all members of the firstLevelGameObjects list
-            foreach (var item in firstLevelGameObjects)
+            foreach (var item in levelGameObjects)
             {
                 // The desired position for the Instantiate is calculated here. Because only the Y axis changes.
                 // Therefore, the rest are fixed
@@ -591,14 +522,189 @@ namespace AC
         }
 
         #endregion
-        
+
+        #region Add side
+
+        //------------------------------------------------------------------------------------------------------------//
+        //This list is filled only after the first time, and it puts the initial game objects of the floors inside itself
+        //It must be empty for the next buildings
+        private static List<GameObject> _firstSideGameObjects = null;
+
+        /// <summary>
+        /// this method add level to building
+        /// </summary>
+        /// <param name="parent"></param>
+        public static void AddSide(GameObject parent)
+        {
+            // This list is a collection of all the game objects of a building
+            var childList = new List<GameObject>();
+
+            //Here we say return if the given object has no children
+            if (parent.transform.childCount <= 0) return;
+
+            // Here we say put all the game objects in the sub-set into the childList
+            for (int i = 0; i < parent.transform.childCount; i++)
+            {
+                childList.Add(parent.transform.GetChild(i).gameObject);
+            }
+
+            var backGameObjects = BackGameObjects(childList);
+
+            var sideGameObjects = SideGameObjects(childList);
+
+            _firstSideGameObjects ??= sideGameObjects;
+
+            var sideWidth = sideGameObjects[0].GetComponent<ObjectDetail>().LocalSize.z;
+
+            foreach (var roof in backGameObjects)
+            {
+                var transformPosition = roof.transform.position;
+                transformPosition.z -= sideWidth;
+                roof.transform.position = transformPosition;
+            }
+
+            var endSidePositionZ = backGameObjects[0].transform.position.z +
+                                   sideGameObjects[0].GetComponent<ObjectDetail>().LocalSize.z;
+
+            if (_firstSideGameObjects == null) return;
+            foreach (var item in sideGameObjects)
+            {
+                var itemPosition = item.transform.position;
+                itemPosition.z = endSidePositionZ;
+                var gameObject = Object.Instantiate(item, itemPosition, Quaternion.identity);
+                gameObject.transform.parent = parent.transform;
+            }
+        }
+
+        #endregion
+
+        #region Add middle
+
+        //------------------------------------------------------------------------------------------------------------//
+        //This list is filled only after the first time, and it puts the initial game objects of the floors inside itself
+        //It must be empty for the next buildings
+        private static List<GameObject> _firstMiddleGameObjects = null;
+
+        /// <summary>
+        /// this method add level to building
+        /// </summary>
+        /// <param name="parent"></param>
+        public static void AddMiddle(GameObject parent)
+        {
+            // This list is a collection of all the game objects of a building
+            var childList = new List<GameObject>();
+
+            //Here we say return if the given object has no children
+            if (parent.transform.childCount <= 0) return;
+
+            // Here we say put all the game objects in the sub-set into the childList
+            for (int i = 0; i < parent.transform.childCount; i++)
+            {
+                childList.Add(parent.transform.GetChild(i).gameObject);
+            }
+
+            var leftGameObjects = LeftGameObjects(childList);
+
+            var middleGameObjects = MiddleGameObjects(childList);
+
+            _firstMiddleGameObjects ??= middleGameObjects;
+
+            var middleWidth = middleGameObjects[0].GetComponent<ObjectDetail>().LocalSize.x;
+
+            foreach (var left in leftGameObjects)
+            {
+                var transformPosition = left.transform.position;
+                transformPosition.x += middleWidth;
+                left.transform.position = transformPosition;
+            }
+
+            var leftWidth = leftGameObjects.Find(l => l.GetComponent<ObjectDetail>().Type.ToLower().Equals("ll"))
+                .GetComponent<ObjectDetail>().LocalSize.x;
+
+            var endLeftPositionX =
+                leftGameObjects.Find(l => l.GetComponent<ObjectDetail>().Type.ToLower().Equals("fsl")).transform
+                    .position.x - middleWidth - leftWidth;
+
+            if (_firstMiddleGameObjects == null) return;
+            foreach (var item in middleGameObjects)
+            {
+                var itemPosition = item.transform.position;
+                itemPosition.x = endLeftPositionX;
+                var gameObject = Object.Instantiate(item, itemPosition, Quaternion.identity);
+                gameObject.transform.parent = parent.transform;
+            }
+        }
+
+        #endregion
+
+        #region Reduce Level
+
+        public static void LevelReducer(GameObject parent)
+        {
+            var childList = new List<GameObject>();
+            //Here we say return if the given object has no children
+            if (parent.transform.childCount <= 0) return;
+            // Here we say put all the game objects in the sub-set into the childList
+            for (int i = 0; i < parent.transform.childCount; i++)
+            {
+                childList.Add(parent.transform.GetChild(i).gameObject);
+            }
+
+            var roofObjects = RoofGameObjects(childList);
+            var endLevelGameObjects = EndLevelGameObjects(childList);
+            foreach (var gameObject in endLevelGameObjects)
+            {
+                if (gameObject.transform.parent == gameObject.transform.Find("hiddenObjects"))
+                {
+                    var index = endLevelGameObjects.IndexOf(gameObject);
+                    endLevelGameObjects.RemoveAt(index);
+                }
+            }
+
+            var levelHeight = endLevelGameObjects[0].GetComponent<ObjectDetail>().LocalSize.y;
+            foreach (var roof in roofObjects)
+            {
+                var transformPosition = roof.transform.position;
+                transformPosition.y -= levelHeight;
+                roof.transform.position = transformPosition;
+            }
+
+
+            //var levelCount = childList.FindAll(l => l.GetComponent<ObjectDetail>().Type == "LR").Count;
+            var levelCount = childList.FindAll(T=>T.name.Contains("LR")).FindAll(T => T.GetComponent<ObjectDetail>().Type=="LR").Count;
+            Debug.Log(levelCount);
+            
+            if (levelCount > 1)
+            {
+                foreach (var levelGameObject in endLevelGameObjects)
+                {
+                    Object.DestroyImmediate(levelGameObject);
+                }
+            }
+            else if (levelCount == 1)
+            {
+                var hiddenObjects = parent.transform.Find("hiddenObjects").gameObject;
+            
+                foreach (var item in endLevelGameObjects)
+                {
+                    item.transform.parent = hiddenObjects.transform;
+                    // item.SetActive(false);
+                }
+            }
+            else
+            {
+                return;
+            }
+        }
+
+        #endregion
 
         #region Side Game Objects
 
         private static List<GameObject> SideGameObjects(List<GameObject> allChild)
         {
             //the list of name of all Roof part
-            string[] roofParts = { "fsl", "fsr", "lsl", "lsr", "rsl", "rsr" };
+            string[] roofParts = { "fsl", "fsr", "lsl", "lsr", "rsl", "rsr", "rfl", "rfm", "rfr" };
             return allChild.FindAll(go =>
                 roofParts.Any(part => go.name.ToLower().Contains(part)));
         }
@@ -617,14 +723,34 @@ namespace AC
 
         #endregion
 
+        #region End Level Game Objects
+
+        private static List<GameObject> EndLevelGameObjects(List<GameObject> allChild)
+        {
+            //the list of name of all Level part
+            string[] roofParts = { "bll", "blm", "blr", "ll", "lm", "lr", "lsl", "lsr" };
+            var roofPositionY = allChild.Find(o => o.name.ToLower().Contains("rr")).transform.position.y -
+                                allChild.Find(o => o.name.ToLower().Contains("lr")).GetComponent<ObjectDetail>()
+                                    .LocalSize.y;
+            return allChild.FindAll(go =>
+                    roofParts.Any(part => go.name.ToLower().Contains(part)))
+                .FindAll(d => Math.Abs(d.transform.position.y - roofPositionY) < 0.1f);
+        }
+
+        #endregion
+
         #region Level Game Objects
 
         private static List<GameObject> LevelGameObjects(List<GameObject> allChild)
         {
             //the list of name of all Level part
-            string[] roofParts = { "bll", "blm", "blr", "ll", "lm", "lr", "lsl", "lsr" };
-            return allChild.FindAll(go =>
-                roofParts.Any(part => go.name.ToLower().Contains(part)));
+            string[] levelPart = { "bll", "blm", "blr", "ll", "lm", "lr", "lsl", "lsr" };
+
+            var floorHeightSize = allChild.Find(o => o.name.ToLower().Contains("fsr"))
+                .GetComponent<ObjectDetail>().LocalSize.y;
+            Debug.Log(floorHeightSize);
+            return allChild.FindAll(go => levelPart.Any(part => go.name.ToLower().Contains(part)))
+                .FindAll(d => Math.Abs(d.transform.position.y - floorHeightSize) < 0.1f);
         }
 
         #endregion
@@ -634,7 +760,7 @@ namespace AC
         private static List<GameObject> LeftGameObjects(List<GameObject> allChild)
         {
             //the list of name of all Left part
-            string[] roofParts = { "bfl", "bll", "fl", "fsl", "lsl", "rbl", "rl", "rsl", "rfl" };
+            string[] roofParts = { "bfl", "bll", "fl", "fsl", "lsl", "rbl", "rl", "ll", "rsl", "rfl" };
             return allChild.FindAll(go =>
                 roofParts.Any(part => go.name.ToLower().Contains(part)));
         }
@@ -647,6 +773,18 @@ namespace AC
         {
             //the list of name of all Middle part
             string[] roofParts = { "bfm", "blm", "fm", "lm", "rbm", "rm", "rfm" };
+            return allChild.FindAll(go =>
+                roofParts.Any(part => go.name.ToLower().Contains(part)));
+        }
+
+        #endregion
+
+        #region Back Game Objects
+
+        private static List<GameObject> BackGameObjects(List<GameObject> allChild)
+        {
+            //the list of name of all Middle part
+            string[] roofParts = { "bfl", "bfm", "bfr", "bll", "blm", "blr", "rbl", "rbm", "rbr" };
             return allChild.FindAll(go =>
                 roofParts.Any(part => go.name.ToLower().Contains(part)));
         }
