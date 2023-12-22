@@ -46,24 +46,60 @@ namespace AC
 
             //-----------------------------------------------------------------------------------------//
             //Assign CallBacks
-            _actionSomething.clicked += ActionSomething;
+           // _actionSomething.clicked += ActionSomething;
             _typeSelector.RegisterValueChangedCallback(evt => TypeSelect(evt.newValue));
 
             //-----------------------------------------------------------------------------------------//
         }
 
         #endregion
-
+        
         private string TypeSelect(string str)
         {
             return _typeSelected = str;
         }
+        
+        
+        
+        
         [MenuItem("Tools/Test First Initialize")]
-        private static void ActionSomething()
+        private static void FirstInitialize()
         {
             Automation.AutoMakeBuilding();
-            Methods.FirstInitialize(StaticResources.BuildingsList[0]);
+                   // Subscribe to the delegate for handling GUI events in the Scene View
+            SceneView.duringSceneGui += OnSceneGUI;
         }
+        static void OnSceneGUI(SceneView sceneView)
+        {
+            // Handle mouse events
+            Event e = Event.current;
+            if (e.type == EventType.MouseDown && e.button == 0)
+            {
+                // Prevent selection in the scene view
+                e.Use();
+            
+                // Convert mouse position to world position
+                Vector3 mousePos = e.mousePosition;
+                // Note that the y coordinate is flipped in GUI coordinates
+                mousePos.y = sceneView.camera.pixelHeight - mousePos.y;
+                Vector3 worldPos = sceneView.camera.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, 100f)); // 10f is an arbitrary distance from the camera
+
+                // Call Maker with the determined position
+                Methods.FirstInitialize(StaticResources.BuildingsList[0],worldPos);
+            
+                // Unsubscribe when done to prevent multiple subscriptions
+                SceneView.duringSceneGui -= OnSceneGUI;
+                
+            }
+        }
+        
+        
+        
+        
+        
+        
+        
+        
         [MenuItem("Tools/Test Add Level")]
         private static void AddLeveler()
         {

@@ -437,9 +437,11 @@ namespace AC
         /// this method make first building
         /// </summary>
         /// <param name="building"></param>
-        public static void FirstInitialize(Building building)
+        /// <param name="parentPosition"></param>
+        public static void FirstInitialize(Building building, Vector3 parentPosition)
         {
             var parent = new GameObject(building.Name);
+            parent.transform.position = parentPosition;
             var properties = new[]
             {
                 building.BackFloorLeft, building.BackFloorMiddle, building.BackFloorRight,
@@ -457,7 +459,11 @@ namespace AC
             foreach (var property in properties)
             {
                 property[0]?.GameObjectMaker(parent);
+                
             }
+            // Focus on the created object in Scene view
+            Selection.activeGameObject = parent;
+            SceneView.FrameLastActiveSceneView();
         }
 
         #endregion
