@@ -2,10 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace AC
 {
-    public class BaseMesh : ScriptableObject
+    public class BaseMesh : Object
     {
         public string Name { get; set; }
         public string Type { get; set; }

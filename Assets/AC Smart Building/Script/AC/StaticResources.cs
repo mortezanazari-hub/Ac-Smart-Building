@@ -8,6 +8,7 @@ namespace AC
         public static List<MeshesType> TmpMeshesType = new List<MeshesType>();
         public static List<string> BuildingsNameList = new List<string>();
         public const string ContentPath = "Assets/AC Smart Building/Resource/Content/";
+        public const string ResourcePath = "Assets/AC Smart Building/Resource/";
 
         public static string TexturePath(string name)
         {

@@ -46,85 +46,78 @@ namespace AC
 
             //-----------------------------------------------------------------------------------------//
             //Assign CallBacks
-           // _actionSomething.clicked += ActionSomething;
+            // _actionSomething.clicked += ActionSomething;
             _typeSelector.RegisterValueChangedCallback(evt => TypeSelect(evt.newValue));
 
             //-----------------------------------------------------------------------------------------//
         }
 
         #endregion
-        
+
         private string TypeSelect(string str)
         {
             return _typeSelected = str;
         }
-        
-        
-        
-        
+
+
+        //------------------------------------------------------------------------------------------------------------//
+
+
         [MenuItem("Tools/Test First Initialize")]
-        private static void FirstInitialize()
+        private static void EnableObjectPlacing()
         {
             Automation.AutoMakeBuilding();
-                   // Subscribe to the delegate for handling GUI events in the Scene View
             SceneView.duringSceneGui += OnSceneGUI;
         }
-        static void OnSceneGUI(SceneView sceneView)
+        private static void OnSceneGUI(SceneView sceneView)
         {
-            // Handle mouse events
-            Event e = Event.current;
-            if (e.type == EventType.MouseDown && e.button == 0)
+            Event guiEvent = Event.current;
+            if (guiEvent.type == EventType.MouseDown && guiEvent.button == 0)
             {
-                // Prevent selection in the scene view
-                e.Use();
-            
-                // Convert mouse position to world position
-                Vector3 mousePos = e.mousePosition;
-                // Note that the y coordinate is flipped in GUI coordinates
-                mousePos.y = sceneView.camera.pixelHeight - mousePos.y;
-                Vector3 worldPos = sceneView.camera.ScreenToWorldPoint(new Vector3(mousePos.x, mousePos.y, 1f)); // 10f is an arbitrary distance from the camera
-
-                // Call Maker with the determined position
-                Methods.FirstInitialize(StaticResources.BuildingsList[0],worldPos);
-            
-                // Unsubscribe when done to prevent multiple subscriptions
-                SceneView.duringSceneGui -= OnSceneGUI;
-                
+                guiEvent.Use();
+                Ray ray = HandleUtility.GUIPointToWorldRay(guiEvent.mousePosition);
+                Plane groundPlane = new Plane(Vector3.up, Vector3.zero); // A ground plane with normal Vector3.up and passing through the origin
+                if (groundPlane.Raycast(ray, out float enter))
+                {
+                    var hitPoint = ray.GetPoint(enter);
+                    Methods.FirstInitialize(StaticResources.BuildingsList[0],hitPoint);
+                    SceneView.duringSceneGui -= OnSceneGUI; // Unsubscribe to prevent multiple subscriptions
+                }
             }
         }
-        
-        
-        
-        
-        
-        
-        
-        
+        //------------------------------------------------------------------------------------------------------------//
+
+
         [MenuItem("Tools/Test Add Level")]
         private static void AddLeveler()
         {
             Methods.AddLevel(GameObject.Find("Test01"));
-        }   
+        }
+
         [MenuItem("Tools/Test Add Side")]
         private static void AddSide()
         {
             Methods.AddSide(GameObject.Find("Test01"));
-        } 
+        }
+
         [MenuItem("Tools/Test Add Middle")]
         private static void AddMiddle()
         {
             Methods.AddMiddle(GameObject.Find("Test01"));
-        }  
+        }
+
         [MenuItem("Tools/Test Level Reducer")]
         private static void LevelReducer()
         {
             Methods.LevelReducer(GameObject.Find("Test01"));
         }
+
         [MenuItem("Tools/Test Side Reducer")]
         private static void SideReducer()
         {
             Methods.SideReducer(GameObject.Find("Test01"));
         }
+
         [MenuItem("Tools/Test Middle Reducer")]
         private static void MiddleReducer()
         {

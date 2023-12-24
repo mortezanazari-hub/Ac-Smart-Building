@@ -31,7 +31,7 @@ namespace AC
             var go = new GameObject();
             go.transform.parent = parent.transform;
             go.name = $"{Name}_{Variation}_{Type}";
-            go.transform.position = Position;
+            go.transform.localPosition = Position;
             go.AddComponent<MeshFilter>().mesh = Fbx;
             var meshRender = go.AddComponent<MeshRenderer>();
 

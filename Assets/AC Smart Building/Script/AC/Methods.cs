@@ -440,6 +440,7 @@ namespace AC
         /// <param name="parentPosition"></param>
         public static void FirstInitialize(Building building, Vector3 parentPosition)
         {
+            parentPosition.y = 0;
             var parent = new GameObject(building.Name);
             parent.transform.position = parentPosition;
             var properties = new[]
@@ -464,6 +465,8 @@ namespace AC
             // Focus on the created object in Scene view
             // Selection.activeGameObject = parent;
             // SceneView.FrameLastActiveSceneView();
+            
+            Undo.RegisterCreatedObjectUndo(parent, "Create " + parent.name); // Allows the action to be undone
         }
 
         #endregion
