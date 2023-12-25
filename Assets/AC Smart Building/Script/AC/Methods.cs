@@ -303,7 +303,7 @@ namespace AC
         public static Building BuildingMaker()
         {
             var meshList = StaticResources.TmpMeshesType;
-            Building building = new Building();
+            var building = new Building();
             foreach (var mesh in meshList)
             {
                 var type = mesh.Type;
@@ -393,12 +393,32 @@ namespace AC
                 }
             }
 
+            building.Width = BuildingWidth(building);
+            building.Lenght = BuildingLength(building);
+            building.Height = BuildingHeight(building);
             building.Name = building.FloorLeft[0].Name;
 
             return building;
         }
 
         #endregion
+
+        static float BuildingWidth(Building building)
+        {
+            return building.BackFloorLeft[0].Size.x + building.BackFloorMiddle[0].Size.x +
+                   building.BackFloorRight[0].Size.x;
+        }
+
+        static float BuildingHeight(Building building)
+        {
+            return building.FloorRight[0].Size.y + building.LevelRight[0].Size.y +
+                   building.RoofRight[0].Size.y;
+        }
+
+        static float BuildingLength(Building building)
+        {
+            return building.FloorSideRight[0].Size.z;
+        }
 
         #region Reset Tmp Base Meshes
 
@@ -460,12 +480,11 @@ namespace AC
             foreach (var property in properties)
             {
                 property[0]?.GameObjectMaker(parent);
-                
             }
             // Focus on the created object in Scene view
             // Selection.activeGameObject = parent;
             // SceneView.FrameLastActiveSceneView();
-            
+
             Undo.RegisterCreatedObjectUndo(parent, "Create " + parent.name); // Allows the action to be undone
         }
 
@@ -824,10 +843,11 @@ namespace AC
         private static List<GameObject> EndMiddleGameObjects(List<GameObject> allChild)
         {
             //the list of name of all Level part
-            string[] parts = {  "bfm", "blm", "fm", "lm", "rbm", "rm", "rfm" };
+            string[] parts = { "bfm", "blm", "fm", "lm", "rbm", "rm", "rfm" };
             var leftPositionX = allChild.Find(o => o.name.ToLower().Contains("fsl")).transform.position.x -
                                 allChild.Find(o => o.name.ToLower().Contains("fl")).GetComponent<ObjectDetail>()
-                                    .LocalSize.x - allChild.Find(o => o.name.ToLower().Contains("fm")).GetComponent<ObjectDetail>()
+                                    .LocalSize.x - allChild.Find(o => o.name.ToLower().Contains("fm"))
+                                    .GetComponent<ObjectDetail>()
                                     .LocalSize.x;
             return allChild.FindAll(go =>
                     parts.Any(part => go.name.ToLower().Contains(part)))

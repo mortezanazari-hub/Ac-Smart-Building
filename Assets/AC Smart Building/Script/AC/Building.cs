@@ -4,12 +4,11 @@ using System.Collections.Generic;
 
 namespace AC
 {
-    
     public class Building : BaseMesh
     {
-        public float Width;
-        public float Lenght;
-        public float Height;
+        public float Width { get; set; }
+        public float Lenght { get; set; }
+        public float Height { get; set; }
         public List<MeshesType> BackFloorLeft { get; set; } // Back Floor Left
         public List<MeshesType> BackFloorMiddle { get; set; } // Back Floor Middle
         public List<MeshesType> BackFloorRight { get; set; } // Back Floor Right
