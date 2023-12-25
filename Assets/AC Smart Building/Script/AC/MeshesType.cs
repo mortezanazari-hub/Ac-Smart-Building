@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace AC
 {
+    [System.Serializable]
     public class MeshesType : BaseMesh
     {
         public string Filename { get; set; }
@@ -12,6 +13,7 @@ namespace AC
         public Vector3 Size { get; set; }
         public Vector3 PositionMesh { get; set; }
 
+ 
         public MeshesType(string filename, string materialName, bool hasEmissiveMap, Vector3 size, Vector3 positionMesh)
         {
             Name = Methods.NameFinder(filename, "name");
@@ -73,12 +75,12 @@ namespace AC
             go.transform.position = position;
             go.AddComponent<MeshFilter>().mesh = Fbx;
             var meshRender = go.AddComponent<MeshRenderer>();
-
+        
             if (HasLight)
             {
                 var matOff = Materials.Find(m => m.name.Contains("LightOff"));
                 Methods.TextureMatchToMaterial(matOff.name, Textures, matOff);
-
+        
                 var matOn = Materials.Find(m => m.name.Contains("LightOn"));
                 meshRender.material = matOn;
                 Methods.TextureMatchToMaterial(matOn.name, Textures, matOn);
@@ -100,8 +102,8 @@ namespace AC
             meshDetail.Textures = Textures;
             meshDetail.Fbx = Fbx;
             meshDetail.Materials = Materials;
-
-
+        
+        
             return go;
         }
     }

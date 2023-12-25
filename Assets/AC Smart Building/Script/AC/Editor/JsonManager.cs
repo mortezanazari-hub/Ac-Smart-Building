@@ -25,8 +25,13 @@ namespace AC
         {
             using (var streamReader = new StreamReader($"{StaticResources.FbxPath(name)}Obj_Spec.json"))
             {
+                
+             
+                
+                
                 var str = streamReader.ReadToEnd();
                 StaticResources.TmpMeshesType = JsonConvert.DeserializeObject<List<MeshesType>>(str);
+                
             }
         }
     }
