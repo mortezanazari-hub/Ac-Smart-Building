@@ -6,7 +6,7 @@ using Object = UnityEngine.Object;
 
 namespace AC
 {
-    public class BaseMesh : Object
+    public class BaseMesh : ScriptableObject
     {
         public string Name { get; set; }
         public string Type { get; set; }
