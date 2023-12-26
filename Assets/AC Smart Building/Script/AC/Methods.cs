@@ -460,13 +460,14 @@ namespace AC
         /// <param name="parentPosition"></param>
         /// <param name="rotationEulerAngles"></param>
         public static void FirstInitialize(Building building, Vector3 parentPosition,
-            Vector3 rotationEulerAngles = default)
+            float rotationEulerAngles )
         {
             parentPosition.y = 0;
             var parent = new GameObject(building.Name);
             parent.transform.position = parentPosition;
-            var transformRotation = parent.transform.rotation;
-            transformRotation.eulerAngles = rotationEulerAngles;
+            Vector3 rotation = parent.transform.rotation.eulerAngles;
+            rotation.y = rotationEulerAngles;
+            parent.transform.rotation = Quaternion.Euler(rotation);
 
             var properties = new[]
             {

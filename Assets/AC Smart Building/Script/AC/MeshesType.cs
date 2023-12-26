@@ -34,6 +34,7 @@ namespace AC
             go.transform.parent = parent.transform;
             go.name = $"{Name}_{Variation}_{Type}";
             go.transform.localPosition = Position;
+            go.transform.localRotation= Quaternion.identity;
             go.AddComponent<MeshFilter>().mesh = Fbx;
             var meshRender = go.AddComponent<MeshRenderer>();
 

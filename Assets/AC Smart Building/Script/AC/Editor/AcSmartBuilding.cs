@@ -61,70 +61,76 @@ namespace AC
 
 
         //------------------------------------------------------------------------------------------------------------//
-
-[MenuItem("Tools/Test First Initialize")]
-private static void EnableObjectPlacing()
-{
-    Automation.AutoMakeBuilding();
-    SceneView.duringSceneGui += OnSceneGUI;
-}
-
-private static void OnSceneGUI(SceneView sceneView)
-{
-    Event guiEvent = Event.current;
-    Vector3 size = new Vector3(
-        Methods.BuildingWidth(StaticResources.SelectedBuilding(StaticResources.BuildingsList)),
-        Methods.BuildingHeight(StaticResources.SelectedBuilding(StaticResources.BuildingsList)),
-        Methods.BuildingLength(StaticResources.SelectedBuilding(StaticResources.BuildingsList))
-    );
-
-    if (guiEvent.type == EventType.Repaint)
-    {
-        Ray ray = HandleUtility.GUIPointToWorldRay(guiEvent.mousePosition);
-        Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
-        float enter;
-        if (groundPlane.Raycast(ray, out enter))
+        [MenuItem("Tools/Test First Initialize")]
+        private static void EnableObjectPlacing()
         {
-            Vector3 hitPoint = ray.GetPoint(enter);
-            
-            // ترسیم مکعب پیش‌نمایش
-            Handles.zTest = UnityEngine.Rendering.CompareFunction.LessEqual;
-            Color cubeColor = new Color(1, 1, 1, 0.25f); // رنگ شفاف
-            Handles.color = cubeColor;
-            Vector3 cubeCenter = hitPoint + new Vector3(size.x / 2, size.y / 2, -size.z / 2);
-            Handles.DrawWireCube(cubeCenter, size);
-
-            // اضافه کردن یک خط قرمز برای نشان دادن جهت
-            Vector3 directionPoint = hitPoint + new Vector3(size.x, 0, 0); // نقطه پایان خط
-            Handles.color = Color.red; // رنگ قرمز برای خط
-            Handles.DrawLine(hitPoint, directionPoint);
+            Automation.AutoMakeBuilding();
+            SceneView.duringSceneGui += OnSceneGUI;
         }
-    }
 
-    if (guiEvent.type == EventType.MouseDown && guiEvent.button == 0 &&
-        guiEvent.modifiers == EventModifiers.None)
-    {
-        guiEvent.Use();
-        Ray ray = HandleUtility.GUIPointToWorldRay(guiEvent.mousePosition);
-        Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
-        float enter;
-        if (groundPlane.Raycast(ray, out enter))
+        private static float RotateAngle = 0f; // Add this variable to store the rotation angle
+
+        private static void OnSceneGUI(SceneView sceneView)
         {
-            Vector3 hitPoint = ray.GetPoint(enter);
-            // Adjust for bottom right corner placement
-            Vector3 placePoint = hitPoint;
-            Methods.FirstInitialize(StaticResources.SelectedBuilding(StaticResources.BuildingsList),
-                placePoint);
-            SceneView.duringSceneGui -= OnSceneGUI; // ترک کردن اشتراک‌گذاری پس از قرار دادن شی
-        }
-    }
+            Event guiEvent = Event.current;
+            Vector3 size = new Vector3(
+                Methods.BuildingWidth(StaticResources.SelectedBuilding(StaticResources.BuildingsList)),
+                Methods.BuildingHeight(StaticResources.SelectedBuilding(StaticResources.BuildingsList)),
+                Methods.BuildingLength(StaticResources.SelectedBuilding(StaticResources.BuildingsList))
+            );
 
-    // این برای اطمینان از بازسازی SceneView و به‌روزرسانی پیش‌نمایش است
-    if (guiEvent.type == EventType.Layout)
-    {
-        HandleUtility.AddDefaultControl(GUIUtility.GetControlID(FocusType.Passive));
-    }
-}
+            if (guiEvent.type == EventType.Repaint)
+            {
+                Ray ray = HandleUtility.GUIPointToWorldRay(guiEvent.mousePosition);
+                var groundPlane = new Plane(Vector3.up, Vector3.zero);
+                float enter;
+                if (groundPlane.Raycast(ray, out enter))
+                {
+                    Vector3 hitPoint = ray.GetPoint(enter);
+
+                    // Apply rotation to the preview box
+                    Quaternion rotation = Quaternion.Euler(0f, RotateAngle, 0f);
+                    Vector3 rotatedSize = rotation * size;
+                    Vector3 cubeCenter =
+                        hitPoint + new Vector3(rotatedSize.x / 2, rotatedSize.y / 2, -rotatedSize.z / 2);
+                    Handles.DrawWireCube(cubeCenter, rotatedSize);
+
+                    // Add a red line for the front of the cube
+                    Vector3 directionPoint = hitPoint + new Vector3(rotatedSize.x, 0, 0);
+                    Handles.color = Color.red;
+                    Handles.DrawLine(hitPoint, directionPoint);
+                    Handles.ArrowHandleCap(0,hitPoint,rotation,3,EventType.Repaint);
+                }
+            }
+
+            if (guiEvent.type == EventType.MouseDown && guiEvent.button == 0 &&
+                guiEvent.modifiers == EventModifiers.None)
+            {
+                guiEvent.Use();
+                var ray = HandleUtility.GUIPointToWorldRay(guiEvent.mousePosition);
+                var groundPlane = new Plane(Vector3.up, Vector3.zero);
+                float enter;
+                if (groundPlane.Raycast(ray, out enter))
+                {
+                    var hitPoint = ray.GetPoint(enter);
+                    var placePoint = hitPoint;
+                    Methods.FirstInitialize(StaticResources.SelectedBuilding(StaticResources.BuildingsList), placePoint,
+                        RotateAngle);
+                    SceneView.duringSceneGui -= OnSceneGUI;
+                }
+            }
+
+            if (guiEvent.type == EventType.KeyDown && guiEvent.keyCode == KeyCode.Space)
+            {
+                RotateAngle += 90f; // Rotate by 90 degrees when space button is pressed
+                sceneView.Repaint(); // Repaint the scene view to update the rotation
+            }
+
+            if (guiEvent.type == EventType.Layout)
+            {
+                HandleUtility.AddDefaultControl(GUIUtility.GetControlID(FocusType.Passive));
+            }
+        }
 
         //------------------------------------------------------------------------------------------------------------//
 
