@@ -394,7 +394,7 @@ namespace AC
             }
 
             building.Width = BuildingWidth(building);
-            building.Lenght = BuildingLength(building);
+            building.Length = BuildingLength(building);
             building.Height = BuildingHeight(building);
             building.Name = building.FloorLeft[0].Name;
 
@@ -403,21 +403,21 @@ namespace AC
 
         #endregion
 
-        static float BuildingWidth(Building building)
+        public static float BuildingWidth(Building building)
         {
-            return building.BackFloorLeft[0].Size.x + building.BackFloorMiddle[0].Size.x +
-                   building.BackFloorRight[0].Size.x;
+            return building.BackFloorLeft[0].LocalSize.x + building.BackFloorMiddle[0].LocalSize.x +
+                   building.BackFloorRight[0].LocalSize.x;
         }
 
-        static float BuildingHeight(Building building)
+        public static float BuildingHeight(Building building)
         {
-            return building.FloorRight[0].Size.y + building.LevelRight[0].Size.y +
-                   building.RoofRight[0].Size.y;
+            return building.FloorRight[0].LocalSize.y + building.LevelRight[0].LocalSize.y +
+                   building.RoofRight[0].LocalSize.y;
         }
 
-        static float BuildingLength(Building building)
+        public static float BuildingLength(Building building)
         {
-            return building.FloorSideRight[0].Size.z;
+            return building.FloorSideRight[0].LocalSize.z;
         }
 
         #region Reset Tmp Base Meshes
@@ -458,11 +458,16 @@ namespace AC
         /// </summary>
         /// <param name="building"></param>
         /// <param name="parentPosition"></param>
-        public static void FirstInitialize(Building building, Vector3 parentPosition)
+        /// <param name="rotationEulerAngles"></param>
+        public static void FirstInitialize(Building building, Vector3 parentPosition,
+            Vector3 rotationEulerAngles = default)
         {
             parentPosition.y = 0;
             var parent = new GameObject(building.Name);
             parent.transform.position = parentPosition;
+            var transformRotation = parent.transform.rotation;
+            transformRotation.eulerAngles = rotationEulerAngles;
+
             var properties = new[]
             {
                 building.BackFloorLeft, building.BackFloorMiddle, building.BackFloorRight,

@@ -62,29 +62,70 @@ namespace AC
 
         //------------------------------------------------------------------------------------------------------------//
 
+[MenuItem("Tools/Test First Initialize")]
+private static void EnableObjectPlacing()
+{
+    Automation.AutoMakeBuilding();
+    SceneView.duringSceneGui += OnSceneGUI;
+}
 
-        [MenuItem("Tools/Test First Initialize")]
-        private static void EnableObjectPlacing()
+private static void OnSceneGUI(SceneView sceneView)
+{
+    Event guiEvent = Event.current;
+    Vector3 size = new Vector3(
+        Methods.BuildingWidth(StaticResources.SelectedBuilding(StaticResources.BuildingsList)),
+        Methods.BuildingHeight(StaticResources.SelectedBuilding(StaticResources.BuildingsList)),
+        Methods.BuildingLength(StaticResources.SelectedBuilding(StaticResources.BuildingsList))
+    );
+
+    if (guiEvent.type == EventType.Repaint)
+    {
+        Ray ray = HandleUtility.GUIPointToWorldRay(guiEvent.mousePosition);
+        Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
+        float enter;
+        if (groundPlane.Raycast(ray, out enter))
         {
-            Automation.AutoMakeBuilding();
-            SceneView.duringSceneGui += OnSceneGUI;
+            Vector3 hitPoint = ray.GetPoint(enter);
+            
+            // ترسیم مکعب پیش‌نمایش
+            Handles.zTest = UnityEngine.Rendering.CompareFunction.LessEqual;
+            Color cubeColor = new Color(1, 1, 1, 0.25f); // رنگ شفاف
+            Handles.color = cubeColor;
+            Vector3 cubeCenter = hitPoint + new Vector3(size.x / 2, size.y / 2, -size.z / 2);
+            Handles.DrawWireCube(cubeCenter, size);
+
+            // اضافه کردن یک خط قرمز برای نشان دادن جهت
+            Vector3 directionPoint = hitPoint + new Vector3(size.x, 0, 0); // نقطه پایان خط
+            Handles.color = Color.red; // رنگ قرمز برای خط
+            Handles.DrawLine(hitPoint, directionPoint);
         }
-        private static void OnSceneGUI(SceneView sceneView)
+    }
+
+    if (guiEvent.type == EventType.MouseDown && guiEvent.button == 0 &&
+        guiEvent.modifiers == EventModifiers.None)
+    {
+        guiEvent.Use();
+        Ray ray = HandleUtility.GUIPointToWorldRay(guiEvent.mousePosition);
+        Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
+        float enter;
+        if (groundPlane.Raycast(ray, out enter))
         {
-            Event guiEvent = Event.current;
-            if (guiEvent.type == EventType.MouseDown && guiEvent.button == 0)
-            {
-                guiEvent.Use();
-                Ray ray = HandleUtility.GUIPointToWorldRay(guiEvent.mousePosition);
-                Plane groundPlane = new Plane(Vector3.up, Vector3.zero); // A ground plane with normal Vector3.up and passing through the origin
-                if (groundPlane.Raycast(ray, out float enter))
-                {
-                    var hitPoint = ray.GetPoint(enter);
-                    Methods.FirstInitialize(StaticResources.BuildingsList[0],hitPoint);
-                    SceneView.duringSceneGui -= OnSceneGUI; // Unsubscribe to prevent multiple subscriptions
-                }
-            }
+            Vector3 hitPoint = ray.GetPoint(enter);
+            // Adjust for bottom right corner placement
+            Vector3 placePoint = hitPoint;
+            Methods.FirstInitialize(StaticResources.SelectedBuilding(StaticResources.BuildingsList),
+                placePoint);
+            SceneView.duringSceneGui -= OnSceneGUI; // ترک کردن اشتراک‌گذاری پس از قرار دادن شی
         }
+    }
+
+    // این برای اطمینان از بازسازی SceneView و به‌روزرسانی پیش‌نمایش است
+    if (guiEvent.type == EventType.Layout)
+    {
+        HandleUtility.AddDefaultControl(GUIUtility.GetControlID(FocusType.Passive));
+    }
+}
+
         //------------------------------------------------------------------------------------------------------------//
 
 

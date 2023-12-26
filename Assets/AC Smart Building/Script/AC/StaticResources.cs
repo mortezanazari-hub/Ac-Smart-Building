@@ -29,5 +29,10 @@ namespace AC
         {
             return $"{ContentPath}{name}/";
         }
+
+        public static Building SelectedBuilding(List<Building> list)
+        {
+            return list[0];
+        }
     }
 }
