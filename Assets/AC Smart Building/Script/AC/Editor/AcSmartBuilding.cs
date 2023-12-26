@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -61,6 +62,8 @@ namespace AC
 
 
         //------------------------------------------------------------------------------------------------------------//
+
+
         [MenuItem("Tools/Test First Initialize")]
         private static void EnableObjectPlacing()
         {
@@ -73,64 +76,68 @@ namespace AC
         private static void OnSceneGUI(SceneView sceneView)
         {
             Event guiEvent = Event.current;
+            var selectedBuilding = StaticResources.SelectedBuilding(StaticResources.BuildingsList);
             Vector3 size = new Vector3(
-                Methods.BuildingWidth(StaticResources.SelectedBuilding(StaticResources.BuildingsList)),
-                Methods.BuildingHeight(StaticResources.SelectedBuilding(StaticResources.BuildingsList)),
-                Methods.BuildingLength(StaticResources.SelectedBuilding(StaticResources.BuildingsList))
+                Methods.BuildingWidth(selectedBuilding),
+                Methods.BuildingHeight(selectedBuilding),
+                Methods.BuildingLength(selectedBuilding)
             );
 
-            if (guiEvent.type == EventType.Repaint)
+            float enter;
+            Ray ray = HandleUtility.GUIPointToWorldRay(guiEvent.mousePosition);
+            Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
+            Quaternion rotation = Quaternion.Euler(0f, RotateAngle, 0f);
+            switch (guiEvent.type)
             {
-                Ray ray = HandleUtility.GUIPointToWorldRay(guiEvent.mousePosition);
-                var groundPlane = new Plane(Vector3.up, Vector3.zero);
-                float enter;
-                if (groundPlane.Raycast(ray, out enter))
-                {
-                    Vector3 hitPoint = ray.GetPoint(enter);
+                case EventType.Repaint:
+                case EventType.MouseDown:
+                    if (groundPlane.Raycast(ray, out enter))
+                    {
+                        Vector3 hitPoint = ray.GetPoint(enter);
+                        Vector3 rotatedSize = rotation * size;
+                        var cubeCenterOffset = Math.Abs(RotateAngle - 90) < 0 || Math.Abs(RotateAngle - (-90)) < 0
+                            ? new Vector3(-rotatedSize.x, rotatedSize.y, rotatedSize.z)
+                            : new Vector3(rotatedSize.x, rotatedSize.y, -rotatedSize.z);
+                        cubeCenterOffset /= 2;
+                        Vector3 cubeCenter = hitPoint + cubeCenterOffset;
 
-                    // Apply rotation to the preview box
-                    Quaternion rotation = Quaternion.Euler(0f, RotateAngle, 0f);
-                    Vector3 rotatedSize = rotation * size;
-                    Vector3 cubeCenter =
-                        hitPoint + new Vector3(rotatedSize.x / 2, rotatedSize.y / 2, -rotatedSize.z / 2);
-                    Handles.DrawWireCube(cubeCenter, rotatedSize);
+                        Handles.DrawWireCube(cubeCenter, rotatedSize);
+                        if (guiEvent.type == EventType.Repaint)
+                        {
+                            Handles.color = Color.red;
+                            Handles.ArrowHandleCap(0, hitPoint, rotation, 5, EventType.Repaint);
+                        }
 
-                    // Add a red line for the front of the cube
-                    Vector3 directionPoint = hitPoint + new Vector3(rotatedSize.x, 0, 0);
-                    Handles.color = Color.red;
-                    Handles.DrawLine(hitPoint, directionPoint);
-                    Handles.ArrowHandleCap(0,hitPoint,rotation,3,EventType.Repaint);
-                }
-            }
+                        if (guiEvent.type == EventType.MouseDown && guiEvent.button == 0 &&
+                            guiEvent.modifiers == EventModifiers.None)
+                        {
+                            guiEvent.Use();
+                            Methods.FirstInitialize(selectedBuilding, hitPoint, RotateAngle);
+                            SceneView.duringSceneGui -= OnSceneGUI;
+                        }
 
-            if (guiEvent.type == EventType.MouseDown && guiEvent.button == 0 &&
-                guiEvent.modifiers == EventModifiers.None)
-            {
-                guiEvent.Use();
-                var ray = HandleUtility.GUIPointToWorldRay(guiEvent.mousePosition);
-                var groundPlane = new Plane(Vector3.up, Vector3.zero);
-                float enter;
-                if (groundPlane.Raycast(ray, out enter))
-                {
-                    var hitPoint = ray.GetPoint(enter);
-                    var placePoint = hitPoint;
-                    Methods.FirstInitialize(StaticResources.SelectedBuilding(StaticResources.BuildingsList), placePoint,
-                        RotateAngle);
+                        if (guiEvent.type == EventType.MouseDown && guiEvent.button == 1 &&
+                            guiEvent.modifiers == EventModifiers.None)
+                        {
+                            SceneView.duringSceneGui -= OnSceneGUI;
+                        }
+                    }
+
+                    break;
+                case EventType.KeyDown when guiEvent.keyCode == KeyCode.Space:
+                    RotateAngle += 90f;
+                    if (RotateAngle > 180f) RotateAngle -= 360f;
+                    sceneView.Repaint();
+                    break;
+                case EventType.KeyDown when guiEvent.keyCode == KeyCode.Escape:
                     SceneView.duringSceneGui -= OnSceneGUI;
-                }
-            }
-
-            if (guiEvent.type == EventType.KeyDown && guiEvent.keyCode == KeyCode.Space)
-            {
-                RotateAngle += 90f; // Rotate by 90 degrees when space button is pressed
-                sceneView.Repaint(); // Repaint the scene view to update the rotation
-            }
-
-            if (guiEvent.type == EventType.Layout)
-            {
-                HandleUtility.AddDefaultControl(GUIUtility.GetControlID(FocusType.Passive));
+                    break;
+                case EventType.Layout:
+                    HandleUtility.AddDefaultControl(GUIUtility.GetControlID(FocusType.Passive));
+                    break;
             }
         }
+
 
         //------------------------------------------------------------------------------------------------------------//
 
