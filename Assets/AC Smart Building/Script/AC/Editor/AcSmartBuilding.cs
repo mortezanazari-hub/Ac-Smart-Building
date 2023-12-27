@@ -85,29 +85,27 @@ namespace AC
 
             float enter;
             Ray ray = HandleUtility.GUIPointToWorldRay(guiEvent.mousePosition);
-            Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
-            Quaternion rotation = Quaternion.Euler(0f, RotateAngle, 0f);
+            var groundPlane = new Plane(Vector3.up, Vector3.zero);
+            var rotation = Quaternion.Euler(0f, RotateAngle, 0f);
             switch (guiEvent.type)
             {
                 case EventType.Repaint:
                 case EventType.MouseDown:
+                    Vector3 rotatedSize = rotation * size;
                     if (groundPlane.Raycast(ray, out enter))
                     {
-                        Vector3 hitPoint = ray.GetPoint(enter);
-                        Vector3 rotatedSize = rotation * size;
+                        var hitPoint = ray.GetPoint(enter);
                         var cubeCenterOffset = Math.Abs(RotateAngle - 90) < 0 || Math.Abs(RotateAngle - (-90)) < 0
                             ? new Vector3(-rotatedSize.x, rotatedSize.y, rotatedSize.z)
                             : new Vector3(rotatedSize.x, rotatedSize.y, -rotatedSize.z);
                         cubeCenterOffset /= 2;
-                        Vector3 cubeCenter = hitPoint + cubeCenterOffset;
-
+                        var cubeCenter = hitPoint + cubeCenterOffset;
                         Handles.DrawWireCube(cubeCenter, rotatedSize);
                         if (guiEvent.type == EventType.Repaint)
                         {
                             Handles.color = Color.red;
                             Handles.ArrowHandleCap(0, hitPoint, rotation, 5, EventType.Repaint);
                         }
-
                         if (guiEvent.type == EventType.MouseDown && guiEvent.button == 0 &&
                             guiEvent.modifiers == EventModifiers.None)
                         {
@@ -115,14 +113,19 @@ namespace AC
                             Methods.FirstInitialize(selectedBuilding, hitPoint, RotateAngle);
                             SceneView.duringSceneGui -= OnSceneGUI;
                         }
-
                         if (guiEvent.type == EventType.MouseDown && guiEvent.button == 1 &&
                             guiEvent.modifiers == EventModifiers.None)
                         {
                             SceneView.duringSceneGui -= OnSceneGUI;
                         }
+                        if (guiEvent.type == EventType.MouseDown && guiEvent.button == 2 &&
+                            guiEvent.modifiers == EventModifiers.None)
+                        {
+                            RotateAngle += 90f;
+                            if (RotateAngle > 180f) RotateAngle -= 360f;
+                            sceneView.Repaint();
+                        }
                     }
-
                     break;
                 case EventType.KeyDown when guiEvent.keyCode == KeyCode.Space:
                     RotateAngle += 90f;
@@ -142,6 +145,18 @@ namespace AC
         //------------------------------------------------------------------------------------------------------------//
 
 
+        [MenuItem("Tools/Test Level By Number")]
+        private static void LevelNumber()
+        {
+            int num;
+            InputWindow window = new InputWindow("Enter the level:");
+            window.Result += (value) => {
+                num = value;
+            };
+            
+            window.Show();
+            Methods.LevelManagement(GameObject.Find("Test01"),num);
+        }
         [MenuItem("Tools/Test Add Level")]
         private static void AddLeveler()
         {

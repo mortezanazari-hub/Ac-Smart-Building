@@ -403,6 +403,8 @@ namespace AC
 
         #endregion
 
+        #region Building Size
+
         public static float BuildingWidth(Building building)
         {
             return building.BackFloorLeft[0].LocalSize.x + building.BackFloorMiddle[0].LocalSize.x +
@@ -419,6 +421,8 @@ namespace AC
         {
             return building.FloorSideRight[0].LocalSize.z;
         }
+
+        #endregion
 
         #region Reset Tmp Base Meshes
 
@@ -787,6 +791,50 @@ namespace AC
         }
 
         #endregion
+
+        public static void LevelManagement(GameObject parent,int num)
+        {
+            var currentLevelNum = CurrentLevelNumber(parent);
+            var residualLevelNum = num - currentLevelNum;
+            if (residualLevelNum > 0)
+            {
+                for (int i = 0; i < residualLevelNum; i++)
+                {
+                    AddLevel(parent);
+                }
+            } else if (residualLevelNum < 0)
+            {
+                for (int i = 0; i < Mathf.Abs(residualLevelNum); i++)
+                {
+                    LevelReducer(parent);
+                }
+            }
+        }
+
+        public static int CurrentLevelNumber(GameObject parent)
+        {
+            return parent.transform.childCount > 0
+                ? parent.transform.Cast<Transform>()
+                    .Select(t => t.gameObject)
+                    .Count(go => go.name.ToLower().Contains("_bll"))
+                : 0;
+        }
+        public static int CurrentSideNumber(GameObject parent)
+        {
+            return parent.transform.childCount > 0
+                ? parent.transform.Cast<Transform>()
+                    .Select(t => t.gameObject)
+                    .Count(go => go.name.ToLower().Contains("_fsr"))
+                : 0;
+        }
+        public static int CurrentMiddleNumber(GameObject parent)
+        {
+            return parent.transform.childCount > 0
+                ? parent.transform.Cast<Transform>()
+                    .Select(t => t.gameObject)
+                    .Count(go => go.name.ToLower().Contains("_bfm"))
+                : 0;
+        }
 
         #region Side Game Objects
 
