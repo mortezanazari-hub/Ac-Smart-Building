@@ -12,6 +12,7 @@ namespace AC
 
         private DropdownField _typeSelector;
 
+        public static GameObject SelectedGameObject = GameObject.Find("Test01");
         private string _typeSelected = "";
 
         #region Windows
@@ -144,53 +145,68 @@ namespace AC
 
         //------------------------------------------------------------------------------------------------------------//
 
-
-        [MenuItem("Tools/Test Level By Number")]
-        private static void LevelNumber()
+        [MenuItem("Tools/Input Window")]
+        public static void OpenInputWindow()
         {
-            int num;
-            InputWindow window = new InputWindow("Enter the level:");
-            window.Result += (value) => {
-                num = value;
-            };
-            
+            InputWindow window = (InputWindow)EditorWindow.GetWindow(typeof(InputWindow));
             window.Show();
-            Methods.LevelManagement(GameObject.Find("Test01"),num);
         }
+        private static int num;
+
+        public void OnGUI()
+        {
+            // نمایش عنوان پنجره
+            GUILayout.Label("Test Level By Number");
+            // نمایش یک کادر متنی برای ورود عدد
+            num = EditorGUILayout.IntField(1);
+        }
+
+        public void OnDestroy()
+        {
+            // ارسال عدد به متد BuildningFloorManagement()
+            Methods.LevelManagement(SelectedGameObject, num);
+        }
+        
+        
+        
+        
+        
+        
+        
         [MenuItem("Tools/Test Add Level")]
         private static void AddLeveler()
         {
-            Methods.AddLevel(GameObject.Find("Test01"));
+            Methods.AddLevel(SelectedGameObject);
         }
 
         [MenuItem("Tools/Test Add Side")]
         private static void AddSide()
         {
-            Methods.AddSide(GameObject.Find("Test01"));
+            Methods.AddSide(SelectedGameObject);
         }
 
         [MenuItem("Tools/Test Add Middle")]
         private static void AddMiddle()
         {
-            Methods.AddMiddle(GameObject.Find("Test01"));
+            Methods.AddMiddle(SelectedGameObject);
         }
 
         [MenuItem("Tools/Test Level Reducer")]
         private static void LevelReducer()
         {
-            Methods.LevelReducer(GameObject.Find("Test01"));
+            Methods.LevelReducer(SelectedGameObject);
         }
 
         [MenuItem("Tools/Test Side Reducer")]
         private static void SideReducer()
         {
-            Methods.SideReducer(GameObject.Find("Test01"));
+            Methods.SideReducer(SelectedGameObject);
         }
 
         [MenuItem("Tools/Test Middle Reducer")]
         private static void MiddleReducer()
         {
-            Methods.MiddleReducer(GameObject.Find("Test01"));
+            Methods.MiddleReducer(SelectedGameObject);
         }
     }
 }
