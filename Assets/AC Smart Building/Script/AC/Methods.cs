@@ -809,6 +809,42 @@ namespace AC
                     LevelReducer(parent);
                 }
             }
+        }        
+        public static void SideSize(GameObject parent,int num)
+        {
+            var currentSideNum = CurrentSideNumber(parent);
+            var residualSideNum = num - currentSideNum;
+            if (residualSideNum > 0)
+            {
+                for (int i = 0; i < residualSideNum; i++)
+                {
+                    AddSide(parent);
+                }
+            } else if (residualSideNum < 0)
+            {
+                for (int i = 0; i < Mathf.Abs(residualSideNum); i++)
+                {
+                    SideReducer(parent);
+                }
+            }
+        }       
+        public static void WidthSize(GameObject parent,int num)
+        {
+            var currentMiddleNum = CurrentMiddleNumber(parent);
+            var residualMiddleNum = num - currentMiddleNum;
+            if (residualMiddleNum > 0)
+            {
+                for (int i = 0; i < residualMiddleNum; i++)
+                {
+                    AddMiddle(parent);
+                }
+            } else if (residualMiddleNum < 0)
+            {
+                for (int i = 0; i < Mathf.Abs(residualMiddleNum); i++)
+                {
+                    MiddleReducer(parent);
+                }
+            }
         }
 
         public static int CurrentLevelNumber(GameObject parent)
@@ -960,5 +996,12 @@ namespace AC
         }
 
         #endregion
+        
+       public static GameObject FindBuildingMesh(string name)
+        {
+            // Finds the GameObject named "Test01" in the current scene
+            GameObject foundObject = GameObject.Find(name);
+            return foundObject;
+        }
     }
 }

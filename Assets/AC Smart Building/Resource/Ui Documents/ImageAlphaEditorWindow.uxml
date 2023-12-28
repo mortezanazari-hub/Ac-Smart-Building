@@ -1,6 +1,8 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
-    <Style src="project://database/Assets/Ac_Building_System/Resource/Style/ImageAlphaEditorStyles.uss?fileID=7433441132597879392&amp;guid=9cb694d833ac0d7409b2babffa164f0d&amp;type=3#ImageAlphaEditorStyles" />
+    <Style src="project://database/Assets/AC%20Smart%20Building/Resource/Style/ImageAlphaEditorStyles.uss?fileID=7433441132597879392&amp;guid=9cb694d833ac0d7409b2babffa164f0d&amp;type=3#ImageAlphaEditorStyles" />
     <ui:Label tabindex="-1" text="Aren Buliding System" display-tooltip-when-elided="true" name="title" style="margin-left: 10px; margin-right: 10px; margin-top: 10px; margin-bottom: 10px;" />
-    <ui:DropdownField label="Select Type" index="0" name="typeSelector" focusable="true" />
-    <ui:Button text="Action Somthing" display-tooltip-when-elided="true" name="actionSomething" style="border-top-left-radius: 10px; border-bottom-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px;" />
+    <ui:Button text="First Initialize" display-tooltip-when-elided="true" name="firstInitialize" style="border-top-left-radius: 10px; border-bottom-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px;" />
+    <ui:SliderInt picking-mode="Ignore" label="Building floor number" value="1" high-value="20" low-value="1" show-input-field="true" name="floorNumber" />
+    <ui:SliderInt picking-mode="Ignore" label="Building SideSize" value="1" high-value="10" low-value="1" show-input-field="true" name="sideSize" />
+    <ui:SliderInt picking-mode="Ignore" label="BuildingWidth" value="1" high-value="10" low-value="1" show-input-field="true" name="buildingWidth" />
 </ui:UXML>

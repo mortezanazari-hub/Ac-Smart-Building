@@ -4,20 +4,28 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
+
 namespace AC
 {
     public class AcSmartBuilding : EditorWindow
     {
-        private Button _actionSomething;
+        private Button _firstInitialize;
+        private SliderInt _floorNumber;
+        private SliderInt _sideSize;
+        private SliderInt _buildingWidth;
 
         private DropdownField _typeSelector;
 
-        public static GameObject SelectedGameObject = GameObject.Find("Test01");
+
+
+       // public static GameObject SelectedGameObject = Methods.FindBuildingMesh("Test01");
         private string _typeSelected = "";
+
 
         #region Windows
 
-        [MenuItem("Tools/ArenCg/Ac Building System")]
+
+        [MenuItem("test/TestGui")]
         public static void OpenEditorWindow()
         {
             var window = GetWindow<AcSmartBuilding>();
@@ -26,9 +34,12 @@ namespace AC
             window.minSize = window.maxSize;
         }
 
+
         #endregion
 
+
         #region CreateGUI
+
 
         private void CreateGUI()
         {
@@ -39,22 +50,32 @@ namespace AC
             root.Add(tree);
             //-----------------------------------------------------------------------------------------//
             //Assign Elements
-            _actionSomething = root.Q<Button>("actionSomething");
+            _firstInitialize = root.Q<Button>("firstInitialize");
+            _floorNumber = root.Q<SliderInt>("floorNumber");
+            _sideSize = root.Q<SliderInt>("sideSize");
+            _buildingWidth = root.Q<SliderInt>("buildingWidth");
+
 
 
             //type selector dropdown field
-            _typeSelector = root.Q<DropdownField>("typeSelector");
+            //_typeSelector = root.Q<DropdownField>("typeSelector");
             //_typeSelector.choices = Automation.Types;
+
 
             //-----------------------------------------------------------------------------------------//
             //Assign CallBacks
-            // _actionSomething.clicked += ActionSomething;
-            _typeSelector.RegisterValueChangedCallback(evt => TypeSelect(evt.newValue));
+             _firstInitialize.clicked += EnableObjectPlacing;
+            //_typeSelector.RegisterValueChangedCallback(evt => TypeSelect(evt.newValue));
+            _floorNumber.RegisterValueChangedCallback(evt => FloorNumberManager(Methods.FindBuildingMesh("Test01"), evt.newValue));
+            _sideSize.RegisterValueChangedCallback(evt => SideNumberManager(Methods.FindBuildingMesh("Test01"), evt.newValue));
+            _buildingWidth.RegisterValueChangedCallback(evt => MiddleNumberManager(Methods.FindBuildingMesh("Test01"), evt.newValue));
 
             //-----------------------------------------------------------------------------------------//
         }
 
+
         #endregion
+
 
         private string TypeSelect(string str)
         {
@@ -62,17 +83,58 @@ namespace AC
         }
 
 
+        private static void FloorNumberManager(GameObject gObject,int num)
+        {
+            Methods.LevelManagement(gObject,num);
+        }
+        private static void SideNumberManager(GameObject gObject,int num)
+        {
+            Methods.SideSize(gObject,num);
+        }
+        private static void MiddleNumberManager(GameObject gObject,int num)
+        {
+            Methods.WidthSize(gObject,num);
+        }
         //------------------------------------------------------------------------------------------------------------//
 
 
-        [MenuItem("Tools/Test First Initialize")]
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+
+       // [MenuItem("Tools/Test First Initialize")]
         private static void EnableObjectPlacing()
         {
             Automation.AutoMakeBuilding();
             SceneView.duringSceneGui += OnSceneGUI;
         }
 
+
         private static float RotateAngle = 0f; // Add this variable to store the rotation angle
+
 
         private static void OnSceneGUI(SceneView sceneView)
         {
@@ -83,6 +145,7 @@ namespace AC
                 Methods.BuildingHeight(selectedBuilding),
                 Methods.BuildingLength(selectedBuilding)
             );
+
 
             float enter;
             Ray ray = HandleUtility.GUIPointToWorldRay(guiEvent.mousePosition);
@@ -143,70 +206,62 @@ namespace AC
         }
 
 
+
         //------------------------------------------------------------------------------------------------------------//
 
-        [MenuItem("Tools/Input Window")]
-        public static void OpenInputWindow()
-        {
-            InputWindow window = (InputWindow)EditorWindow.GetWindow(typeof(InputWindow));
-            window.Show();
-        }
-        private static int num;
 
-        public void OnGUI()
-        {
-            // نمایش عنوان پنجره
-            GUILayout.Label("Test Level By Number");
-            // نمایش یک کادر متنی برای ورود عدد
-            num = EditorGUILayout.IntField(1);
-        }
 
-        public void OnDestroy()
-        {
-            // ارسال عدد به متد BuildningFloorManagement()
-            Methods.LevelManagement(SelectedGameObject, num);
-        }
+   
+
         
         
         
         
         
-        
-        
-        [MenuItem("Tools/Test Add Level")]
-        private static void AddLeveler()
-        {
-            Methods.AddLevel(SelectedGameObject);
-        }
-
-        [MenuItem("Tools/Test Add Side")]
-        private static void AddSide()
-        {
-            Methods.AddSide(SelectedGameObject);
-        }
-
-        [MenuItem("Tools/Test Add Middle")]
-        private static void AddMiddle()
-        {
-            Methods.AddMiddle(SelectedGameObject);
-        }
-
-        [MenuItem("Tools/Test Level Reducer")]
-        private static void LevelReducer()
-        {
-            Methods.LevelReducer(SelectedGameObject);
-        }
-
-        [MenuItem("Tools/Test Side Reducer")]
-        private static void SideReducer()
-        {
-            Methods.SideReducer(SelectedGameObject);
-        }
-
-        [MenuItem("Tools/Test Middle Reducer")]
-        private static void MiddleReducer()
-        {
-            Methods.MiddleReducer(SelectedGameObject);
-        }
+        //
+        //
+        //
+        //
+        //
+        // [MenuItem("Tools/Test Add Level")]
+        // private static void AddLeveler()
+        // {
+        //     Methods.AddLevel(SelectedGameObject);
+        // }
+        //
+        //
+        // [MenuItem("Tools/Test Add Side")]
+        // private static void AddSide()
+        // {
+        //     Methods.AddSide(SelectedGameObject);
+        // }
+        //
+        //
+        // [MenuItem("Tools/Test Add Middle")]
+        // private static void AddMiddle()
+        // {
+        //     Methods.AddMiddle(SelectedGameObject);
+        // }
+        //
+        //
+        // [MenuItem("Tools/Test Level Reducer")]
+        // private static void LevelReducer()
+        // {
+        //     Methods.LevelReducer(SelectedGameObject);
+        // }
+        //
+        //
+        // [MenuItem("Tools/Test Side Reducer")]
+        // private static void SideReducer()
+        // {
+        //     Methods.SideReducer(SelectedGameObject);
+        // }
+        //
+        //
+        // [MenuItem("Tools/Test Middle Reducer")]
+        // private static void MiddleReducer()
+        // {
+        //     Methods.MiddleReducer(SelectedGameObject);
+        // }
     }
 }
