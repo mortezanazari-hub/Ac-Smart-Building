@@ -85,15 +85,15 @@ namespace AC
 
         private static void FloorNumberManager(GameObject gObject,int num)
         {
-            Methods.LevelManagement(gObject,num);
+            Methods.FloorManagement(gObject,num);
         }
         private static void SideNumberManager(GameObject gObject,int num)
         {
-            Methods.SideSize(gObject,num);
+            Methods.SideSizeManagement(gObject,num);
         }
         private static void MiddleNumberManager(GameObject gObject,int num)
         {
-            Methods.WidthSize(gObject,num);
+            Methods.WidthSizeManagement(gObject,num);
         }
         //------------------------------------------------------------------------------------------------------------//
 

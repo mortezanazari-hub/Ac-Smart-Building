@@ -472,7 +472,7 @@ namespace AC
             Vector3 rotation = parent.transform.rotation.eulerAngles;
             rotation.y = rotationEulerAngles;
             parent.transform.rotation = Quaternion.Euler(rotation);
-
+            Debug.Log(rotationEulerAngles);
             var properties = new[]
             {
                 building.BackFloorLeft, building.BackFloorMiddle, building.BackFloorRight,
@@ -792,9 +792,11 @@ namespace AC
 
         #endregion
 
-        public static void LevelManagement(GameObject parent,int num)
+        #region floor managment by number
+
+        public static void FloorManagement(GameObject parent,int num)
         {
-            var currentLevelNum = CurrentLevelNumber(parent);
+            var currentLevelNum = CurrentFloorNumber(parent);
             var residualLevelNum = num - currentLevelNum;
             if (residualLevelNum > 0)
             {
@@ -809,8 +811,13 @@ namespace AC
                     LevelReducer(parent);
                 }
             }
-        }        
-        public static void SideSize(GameObject parent,int num)
+        }       
+
+        #endregion
+
+        #region Side Size Management by number
+
+        public static void SideSizeManagement(GameObject parent,int num)
         {
             var currentSideNum = CurrentSideNumber(parent);
             var residualSideNum = num - currentSideNum;
@@ -827,8 +834,13 @@ namespace AC
                     SideReducer(parent);
                 }
             }
-        }       
-        public static void WidthSize(GameObject parent,int num)
+        }   
+
+        #endregion
+
+        #region Width Size Management by number
+
+        public static void WidthSizeManagement(GameObject parent,int num)
         {
             var currentMiddleNum = CurrentMiddleNumber(parent);
             var residualMiddleNum = num - currentMiddleNum;
@@ -847,7 +859,11 @@ namespace AC
             }
         }
 
-        public static int CurrentLevelNumber(GameObject parent)
+        #endregion
+
+        #region CurrentFloorNumber
+
+        public static int CurrentFloorNumber(GameObject parent)
         {
             return parent.transform.childCount > 0
                 ? parent.transform.Cast<Transform>()
@@ -855,6 +871,11 @@ namespace AC
                     .Count(go => go.name.ToLower().Contains("_bll"))
                 : 0;
         }
+
+        #endregion
+
+        #region CurrentSideNumber
+
         public static int CurrentSideNumber(GameObject parent)
         {
             return parent.transform.childCount > 0
@@ -863,6 +884,11 @@ namespace AC
                     .Count(go => go.name.ToLower().Contains("_fsr"))
                 : 0;
         }
+
+        #endregion
+
+        #region CurrentMiddleNumber
+
         public static int CurrentMiddleNumber(GameObject parent)
         {
             return parent.transform.childCount > 0
@@ -871,6 +897,8 @@ namespace AC
                     .Count(go => go.name.ToLower().Contains("_bfm"))
                 : 0;
         }
+
+        #endregion
 
         #region Side Game Objects
 
@@ -996,12 +1024,16 @@ namespace AC
         }
 
         #endregion
-        
-       public static GameObject FindBuildingMesh(string name)
+
+        #region FindBuildingMesh
+
+        public static GameObject FindBuildingMesh(string name)
         {
             // Finds the GameObject named "Test01" in the current scene
             GameObject foundObject = GameObject.Find(name);
             return foundObject;
         }
+
+        #endregion
     }
 }
